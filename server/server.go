@@ -54,7 +54,7 @@ func (s *server) handleConnection(ctx context.Context, conn net.Conn) {
 	}()
 	go func() {
 		if err := s.handleOutbound(cctx, conn, id); err != nil {
-			log.Printf("Handling outboud stream: %v", err)
+			log.Printf("Handling outbound stream: %v", err)
 			canc()
 		}
 		conn.Close()
@@ -79,7 +79,7 @@ func (s *server) handleInbound(ctx context.Context, conn net.Conn, playerID int)
 			return err
 		}
 		if err := s.state.Handle(&m); err != nil {
-			return err
+			log.Printf("Couldn't handle action but continuing: %v", err)
 		}
 	}
 }

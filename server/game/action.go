@@ -8,6 +8,7 @@ const (
 	ActStartGame Act = iota
 	ActPlayCard
 	ActDiscard
+	ActReturnToLobby
 )
 
 // Action is all info needed from the frontend to act.

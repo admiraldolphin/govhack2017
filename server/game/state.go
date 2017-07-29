@@ -56,6 +56,15 @@ func (s *State) RemovePlayer(id int) error {
 	}
 	copy(s.Players[id:], s.Players[id+1:])
 	s.Players = s.Players[:len(s.Players)-1]
+
+	switch len(s.Players) {
+	case 1:
+		// If there's one player remaining, they win.
+		s.State = StateGameOver
+	case 0:
+		// If there are no players remaining, go back to lobby.
+		s.State = StateLobby
+	}
 	s.notify()
 	return nil
 }
