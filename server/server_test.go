@@ -2,8 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	//	"io"
-	//	"io/ioutil"
 	"net"
 	"reflect"
 	"testing"
@@ -71,7 +69,7 @@ func TestGame(t *testing.T) {
 			recv:   recv2,
 			action: &game.Action{Act: game.ActStartGame},
 			want: &game.State{
-				State: game.StateLobby,
+				State: game.StateInGame,
 				Players: []game.Player{
 					{}, {},
 				},
