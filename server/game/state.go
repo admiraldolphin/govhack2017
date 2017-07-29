@@ -75,6 +75,22 @@ func (s *State) RemovePlayer(id int) error {
 	return nil
 }
 
+func (s *State) nextPlayer(after int) int {
+	min, sup := (1<<31)-1, (1<<31)-1
+	for id := range s.Players {
+		if id < min {
+			min = id
+		}
+		if id > after && id < sup {
+			sup = id
+		}
+	}
+	if sup == (1<<31)-1 {
+		return min
+	}
+	return sup
+}
+
 // Changed returns a channel closed when the state has changed.
 func (s *State) Changed() <-chan struct{} {
 	s.RLock()

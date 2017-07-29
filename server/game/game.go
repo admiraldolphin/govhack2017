@@ -38,6 +38,13 @@ func (s *State) Handle(a *Action) error {
 		default:
 			return fmt.Errorf("bad action for StateInGame [%d]", a.Act)
 		}
+		// Advance whose-turn to the next player, and game clock
+		n := s.nextPlayer(s.WhoseTurn)
+		if n < s.WhoseTurn {
+			s.Clock++
+		}
+		s.WhoseTurn = n
+
 	case StateGameOver:
 		switch a.Act {
 		case ActReturnToLobby:
