@@ -10,7 +10,7 @@ public class LobbyMenu : MonoBehaviour {
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void StartGame()
+    public void StartGame() 
     {
 
     }
