@@ -2,8 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	//	"io"
-	//	"io/ioutil"
 	"net"
 	"reflect"
 	"testing"
@@ -19,17 +17,17 @@ func TestGame(t *testing.T) {
 	}
 	defer s.Close()
 
-	conn1, err := net.Dial("tcp", s.Addr().String())
+	conn0, err := net.Dial("tcp", s.Addr().String())
 	if err != nil {
 		t.Fatalf("Couldn't connect player 0 to game server: %v", err)
 	}
-	defer conn1.Close()
+	defer conn0.Close()
 
-	send1 := json.NewEncoder(conn1)
-	recv1 := json.NewDecoder(conn1)
+	send0 := json.NewEncoder(conn0)
+	recv0 := json.NewDecoder(conn0)
 
 	// Should get a response immediately
-	if err := recv1.Decode(r); err != nil {
+	if err := recv0.Decode(r); err != nil {
 		t.Fatalf("Couldn't get state immediately: %v", err)
 	}
 	if got, want := r.PlayerID, 0; got != want {
@@ -39,17 +37,17 @@ func TestGame(t *testing.T) {
 		t.Errorf("response.State.State = %d, want %d", got, want)
 	}
 
-	conn2, err := net.Dial("tcp", s.Addr().String())
+	conn1, err := net.Dial("tcp", s.Addr().String())
 	if err != nil {
 		t.Fatalf("Couldn't connect player 1 to game server: %v", err)
 	}
-	defer conn2.Close()
+	defer conn1.Close()
 
-	send2 := json.NewEncoder(conn2)
-	recv2 := json.NewDecoder(conn2)
+	send1 := json.NewEncoder(conn1)
+	recv1 := json.NewDecoder(conn1)
 
 	// Should get a response immediately
-	if err := recv2.Decode(r); err != nil {
+	if err := recv1.Decode(r); err != nil {
 		t.Fatalf("Couldn't get state immediately: %v", err)
 	}
 	if got, want := r.PlayerID, 1; got != want {
@@ -67,36 +65,111 @@ func TestGame(t *testing.T) {
 		want   *game.State
 	}{
 		{
-			send:   send2,
-			recv:   recv2,
+			// Player 1 starts the game
+			send:   send1,
+			recv:   recv1,
 			action: &game.Action{Act: game.ActStartGame},
 			want: &game.State{
-				State: game.StateLobby,
-				Players: []game.Player{
-					{}, {},
+				State: game.StateInGame,
+				Players: map[int]*game.Player{
+					0: {
+						Name: "Player 0",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Name: "Player 1",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
+				WhoseTurn: 0,
+				Clock:     0,
 			},
 		},
 		{
-			send:   send1,
-			recv:   recv1,
+			// Player 0 plays a card
+			send:   send0,
+			recv:   recv0,
 			action: &game.Action{Act: game.ActPlayCard},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {
+						Name: "Player 0",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Name: "Player 1",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
+				WhoseTurn: 1,
+				Clock:     0,
 			},
 		},
 		{
-			send:   send2,
-			recv:   recv2,
+			// Player 0 does a no-op
+			send:   send0,
+			recv:   recv0,
+			action: &game.Action{Act: game.ActNoOp},
+			want: &game.State{
+				State: game.StateInGame,
+				Players: map[int]*game.Player{
+					0: {
+						Name: "Player 0",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Name: "Player 1",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+				},
+				WhoseTurn: 1,
+				Clock:     0,
+			},
+		},
+		{
+			// Player 1 discards a card
+			send:   send1,
+			recv:   recv1,
 			action: &game.Action{Act: game.ActDiscard},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {
+						Name: "Player 0",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Name: "Player 1",
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
+				WhoseTurn: 0,
+				Clock:     1,
 			},
 		},
 	}
@@ -105,8 +178,11 @@ func TestGame(t *testing.T) {
 		if err := p.send.Encode(p.action); err != nil {
 			t.Fatalf("Message %d [%v] got error %v", i, p.action, err)
 		}
-		if err := p.recv.Decode(r); err != nil {
-			t.Errorf("After message %d [%v]: got error %v", i, p.action, err)
+		if err := recv0.Decode(r); err != nil {
+			t.Errorf("After message %d [%v]: recv0.Decode = error %v", i, p.action, err)
+		}
+		if err := recv1.Decode(r); err != nil {
+			t.Errorf("After message %d [%v]: recv1.Decode = error %v", i, p.action, err)
 		}
 
 		if got, want := r.State.State, p.want.State; got != want {
@@ -114,6 +190,12 @@ func TestGame(t *testing.T) {
 		}
 		if got, want := r.State.Players, p.want.Players; !reflect.DeepEqual(got, want) {
 			t.Errorf("After message %d [%v]: state.Players = %v, want %v", i, p.action, got, want)
+		}
+		if got, want := r.State.WhoseTurn, p.want.WhoseTurn; got != want {
+			t.Errorf("After message %d [%v]: state.WhoseTurn = %v, want %v", i, p.action, got, want)
+		}
+		if got, want := r.State.Clock, p.want.Clock; got != want {
+			t.Errorf("After message %d [%v]: state.Clock = %v, want %v", i, p.action, got, want)
 		}
 	}
 }

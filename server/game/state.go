@@ -2,7 +2,6 @@ package game
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"sync"
 )
@@ -19,56 +18,23 @@ const (
 
 // State models the entire game state.
 type State struct {
-	State   Statum   `json:"state"`
-	Players []Player `json:"players"`
+	State     Statum          `json:"state"`
+	Players   map[int]*Player `json:"players"`
+	Clock     int             `json:"clock"`
+	WhoseTurn int             `json:"whose_turn"`
 
-	// Non-JSON fields for coordinating state.
+	// Fields for coordinating state.
 	changedNote chan struct{}
 	mu          sync.RWMutex
+	nextID      int
 }
 
 // New returns a new game state.
 func New() *State {
 	return &State{
+		Players:     make(map[int]*Player),
 		changedNote: make(chan struct{}),
 	}
-}
-
-// AddPlayer adds a player.
-func (s *State) AddPlayer() (int, error) {
-	s.Lock()
-	defer s.Unlock()
-	if s.State != StateLobby {
-		return -1, fmt.Errorf("game not in lobby state [%d!=%d]", s.State, StateLobby)
-	}
-	id := len(s.Players)
-	s.Players = append(s.Players, Player{})
-	s.notify()
-	return id, nil
-}
-
-// RemovePlayer quits a player.
-func (s *State) RemovePlayer(id int) error {
-	s.Lock()
-	defer s.Unlock()
-	if lim := len(s.Players); id < 0 || id >= len(s.Players) {
-		return fmt.Errorf("id out of range [%d, %d)", 0, lim)
-	}
-	copy(s.Players[id:], s.Players[id+1:])
-	s.Players = s.Players[:len(s.Players)-1]
-
-	switch len(s.Players) {
-	case 1:
-		if s.State == StateInGame {
-			// If there's one player remaining, they win.
-			s.State = StateGameOver
-		}
-	case 0:
-		// If there are no players remaining, go back to lobby.
-		s.State = StateLobby
-	}
-	s.notify()
-	return nil
 }
 
 // Changed returns a channel closed when the state has changed.

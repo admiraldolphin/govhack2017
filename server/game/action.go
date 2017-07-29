@@ -5,10 +5,11 @@ type Act int
 
 // The acts.
 const (
-	ActStartGame Act = iota
+	ActNoOp      Act = iota // Do nothing, just tell everybody the state
+	ActStartGame            // Go from lobby state to ingame state
 	ActPlayCard
 	ActDiscard
-	ActReturnToLobby
+	ActReturnToLobby // Go from game over state to lobby state
 )
 
 // Action is all info needed from the frontend to act.
