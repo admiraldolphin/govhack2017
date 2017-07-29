@@ -103,8 +103,11 @@ func TestGame(t *testing.T) {
 		if err := p.send.Encode(p.action); err != nil {
 			t.Fatalf("Message %d [%v] got error %v", i, p.action, err)
 		}
-		if err := p.recv.Decode(r); err != nil {
-			t.Errorf("After message %d [%v]: got error %v", i, p.action, err)
+		if err := recv1.Decode(r); err != nil {
+			t.Errorf("After message %d [%v]: recv1.Decode = error %v", i, p.action, err)
+		}
+		if err := recv2.Decode(r); err != nil {
+			t.Errorf("After message %d [%v]: recv2.Decode = error %v", i, p.action, err)
 		}
 
 		if got, want := r.State.State, p.want.State; got != want {
