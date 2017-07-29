@@ -71,7 +71,9 @@ func (s *State) RUnlock() { s.mu.RUnlock() }
 
 // Player is the state relative to a particular player.
 type Player struct {
-	Name  string     `json:"name"`
-	Hand  *HandState `json:"hand"`
-	Score int        `json:"score"`
+	Name      string             `json:"name"`
+	Hand      *HandState         `json:"hand"`
+	Played    []*ActionCardState `json:"played"`
+	Discarded []*ActionCardState `json:"discarded"`
+	Score     int                `json:"score"`
 }
