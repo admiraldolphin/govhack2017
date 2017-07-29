@@ -71,8 +71,8 @@ func TestGame(t *testing.T) {
 			action: &game.Action{Act: game.ActStartGame},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {}, 1: {},
 				},
 			},
 		},
@@ -83,8 +83,8 @@ func TestGame(t *testing.T) {
 			action: &game.Action{Act: game.ActPlayCard},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {}, 1: {},
 				},
 			},
 		},
@@ -95,8 +95,8 @@ func TestGame(t *testing.T) {
 			action: &game.Action{Act: game.ActNoOp},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {}, 1: {},
 				},
 			},
 		},
@@ -107,8 +107,8 @@ func TestGame(t *testing.T) {
 			action: &game.Action{Act: game.ActDiscard},
 			want: &game.State{
 				State: game.StateInGame,
-				Players: []game.Player{
-					{}, {},
+				Players: map[int]*game.Player{
+					0: {}, 1: {},
 				},
 			},
 		},

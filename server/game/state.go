@@ -19,17 +19,21 @@ const (
 
 // State models the entire game state.
 type State struct {
-	State   Statum   `json:"state"`
-	Players []Player `json:"players"`
+	State     Statum          `json:"state"`
+	Players   map[int]*Player `json:"players"`
+	Clock     int             `json:"clock"`
+	WhoseTurn int             `json:"whose_turn"`
 
-	// Non-JSON fields for coordinating state.
+	// Fields for coordinating state.
 	changedNote chan struct{}
 	mu          sync.RWMutex
+	nextID      int
 }
 
 // New returns a new game state.
 func New() *State {
 	return &State{
+		Players:     make(map[int]*Player),
 		changedNote: make(chan struct{}),
 	}
 }
@@ -41,8 +45,9 @@ func (s *State) AddPlayer() (int, error) {
 	if s.State != StateLobby {
 		return -1, fmt.Errorf("game not in lobby state [%d!=%d]", s.State, StateLobby)
 	}
-	id := len(s.Players)
-	s.Players = append(s.Players, Player{})
+	id := s.nextID
+	s.Players[id] = &Player{}
+	s.nextID++
 	s.notify()
 	return id, nil
 }
@@ -51,11 +56,10 @@ func (s *State) AddPlayer() (int, error) {
 func (s *State) RemovePlayer(id int) error {
 	s.Lock()
 	defer s.Unlock()
-	if lim := len(s.Players); id < 0 || id >= len(s.Players) {
-		return fmt.Errorf("id out of range [%d, %d)", 0, lim)
+	if s.Players[id] == nil {
+		return fmt.Errorf("id %d not present", id)
 	}
-	copy(s.Players[id:], s.Players[id+1:])
-	s.Players = s.Players[:len(s.Players)-1]
+	delete(s.Players, id)
 
 	switch len(s.Players) {
 	case 1:
