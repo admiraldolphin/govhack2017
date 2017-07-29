@@ -18,13 +18,8 @@ func People(path string) ([]*Person, error) {
 
 func people(r io.Reader) ([]*Person, error) {
 	var ppl []*Person
-	dec := json.NewDecoder(r)
-	for dec.More() {
-		p := new(Person)
-		if err := dec.Decode(p); err != nil {
-			return nil, err
-		}
-		ppl = append(ppl, p)
+	if err := json.NewDecoder(r).Decode(&ppl); err != nil {
+		return nil, err
 	}
 	return ppl, nil
 }

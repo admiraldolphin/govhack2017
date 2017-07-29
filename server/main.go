@@ -7,14 +7,23 @@ import (
 	"net/http"
 
 	"github.com/admiraldolphin/govhack2017/server/game"
+	"github.com/admiraldolphin/govhack2017/server/load"
 )
 
 var (
 	gamePort = flag.Int("game_port", 23456, "Port for the game to listen on")
 	httpPort = flag.Int("http_port", 23480, "Port the webserver listens on")
+
+	peopleJSON = flag.String("people", "/Users/josh/govhack2017/output.json", "File to load people from")
 )
 
 func main() {
+	ppl, err := load.People(*peopleJSON)
+	if err != nil {
+		log.Printf("Couldn't load people: %v", err)
+	}
+	log.Printf("Loaded %d people", len(ppl))
+
 	s := server{state: game.New(testDeck)}
 
 	// Set up HTTP handlers
