@@ -6,6 +6,7 @@ import (
 )
 
 // CreateDeck churns a bunch of people into a card deck.
-func CreateDeck(ppl []*load.Person) game.Deck {
+func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
+
 	return nil
 }
