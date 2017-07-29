@@ -1,4 +1,4 @@
-package loader
+package load
 
 // Person is used to load the people.
 type Person struct {
