@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"sort"
 )
 
 // Game parameters
@@ -202,7 +203,15 @@ func (s *State) startGame() {
 
 	s.deck = s.baseDeck.Instance()
 	s.deck.Shuffle()
-	for _, p := range s.Players {
+
+	// Deal the players in order, to avoid test failing.
+	pids := make([]int, 0, len(s.Players))
+	for id := range s.Players {
+		pids = append(pids, id)
+	}
+	sort.Ints(pids)
+	for _, id := range pids {
+		p := s.Players[id]
 		p.Hand = &HandState{
 			Actions: s.deck.DrawActions(ActionHandSize),
 			People:  s.deck.DrawPeople(PeopleHandSize),

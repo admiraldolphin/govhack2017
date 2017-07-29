@@ -1,4 +1,4 @@
-package loader
+package load
 
 // Cards is how the card tags are organised.
 type Cards struct {

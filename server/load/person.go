@@ -1,4 +1,4 @@
-package loader
+package load
 
 // Person is used to load the people.
 type Person struct {
@@ -59,7 +59,7 @@ type Person struct {
 	Census struct {
 		CensusYear     string `json:"census_year"`
 		CensusPlace    string `json:"census_place"`
-		CensusChildren string `json:"census_children"`
+		CensusChildren bool   `json:"census_children"`
 		Year           string `json:"year"`
 		Permalink      string `json:"permalink"`
 	} `json:"census"`
