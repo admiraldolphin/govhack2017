@@ -4,7 +4,13 @@ import (
 	"fmt"
 )
 
-const endGameAtRound = 5
+// Game parameters
+const (
+	endGameAtRound = 5
+
+	ActionHandSize = 7
+	PeopleHandSize = 5
+)
 
 // Handle handles an action.
 func (s *State) Handle(a *Action, playerID int) error {
@@ -26,10 +32,8 @@ func (s *State) Handle(a *Action, playerID int) error {
 				return fmt.Errorf("too few players for game [%d<2]", len(s.Players))
 			}
 			s.State = StateInGame
-			s.Clock = 0
-			s.WhoseTurn = -1
-			s.advance()
-			// TODO: shuffle deck, deal cards
+			s.startGame()
+
 		default:
 			return fmt.Errorf("bad action for StateLobby [%d]", a.Act)
 		}
@@ -120,6 +124,7 @@ func (s *State) RemovePlayer(id int) error {
 	return nil
 }
 
+// MUST GUARD WITH LOCK
 func (s *State) nextPlayer(after int) int {
 	min, sup := (1<<31)-1, (1<<31)-1
 	// It's gotta be linear in Players to find the next one when wrapping around.
@@ -135,4 +140,19 @@ func (s *State) nextPlayer(after int) int {
 		return min
 	}
 	return sup
+}
+
+// MUST GUARD WITH LOCK
+func (s *State) startGame() {
+	s.Clock = 0
+	s.WhoseTurn = -1
+	s.advance()
+
+	// TODO: shuffle deck
+	for _, p := range s.Players {
+		p.Hand.Actions = make([]ActionCard, ActionHandSize)
+		p.Hand.People = make([]PersonCard, PeopleHandSize)
+
+		// TODO: deal cards
+	}
 }

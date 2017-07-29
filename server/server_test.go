@@ -72,7 +72,18 @@ func TestGame(t *testing.T) {
 			want: &game.State{
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
-					0: {}, 1: {},
+					0: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
 				WhoseTurn: 0,
 				Clock:     0,
@@ -86,7 +97,18 @@ func TestGame(t *testing.T) {
 			want: &game.State{
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
-					0: {}, 1: {},
+					0: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
 				WhoseTurn: 1,
 				Clock:     0,
@@ -100,7 +122,18 @@ func TestGame(t *testing.T) {
 			want: &game.State{
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
-					0: {}, 1: {},
+					0: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
 				WhoseTurn: 1,
 				Clock:     0,
@@ -114,7 +147,18 @@ func TestGame(t *testing.T) {
 			want: &game.State{
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
-					0: {}, 1: {},
+					0: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
+					1: {
+						Hand: game.Hand{
+							Actions: make([]game.ActionCard, game.ActionHandSize),
+							People:  make([]game.PersonCard, game.PeopleHandSize),
+						},
+					},
 				},
 				WhoseTurn: 0,
 				Clock:     1,
