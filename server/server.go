@@ -43,9 +43,18 @@ func (s *server) handleConnection(ctx context.Context, conn net.Conn) {
 	if err != nil {
 		log.Printf("Can't add player: %v", err)
 		conn.Close()
+		return
+	}
+	cctx, canc := context.WithCancel(ctx)
+
+	// Immediately send down the current state.
+	if err := s.respond(cctx, conn, id); err != nil {
+		log.Printf("Can't respond to new player: %v", err)
+		canc()
+		conn.Close()
+		return
 	}
 
-	cctx, canc := context.WithCancel(ctx)
 	go func() {
 		if err := s.handleInbound(cctx, conn, id); err != nil {
 			log.Printf("Handling inbound stream: %v", err)

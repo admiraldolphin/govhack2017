@@ -18,7 +18,7 @@ func (s *State) Handle(a *Action) error {
 				return fmt.Errorf("too few players for game [%d<2]", len(s.Players))
 			}
 			s.State = StateInGame
-			// TODO: shuffle deck
+			// TODO: shuffle deck, deal cards
 		default:
 			return fmt.Errorf("bad action for StateLobby [%d]", a.Act)
 		}
