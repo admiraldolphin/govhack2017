@@ -79,15 +79,15 @@ func (s *server) handleInbound(ctx context.Context, conn net.Conn, playerID int)
 		case <-ctx.Done():
 			return ctx.Err()
 		}
-		var m game.Action
+		m := new(game.Action)
 		msg, err := rd.ReadBytes('\n')
 		if err != nil {
 			return err
 		}
-		if err := json.Unmarshal(msg, &m); err != nil {
+		if err := json.Unmarshal(msg, m); err != nil {
 			return err
 		}
-		if err := s.state.Handle(&m); err != nil {
+		if err := s.state.Handle(m, playerID); err != nil {
 			log.Printf("Couldn't handle action but continuing: %v", err)
 		}
 	}

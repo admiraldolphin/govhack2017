@@ -5,12 +5,12 @@ import (
 )
 
 // Handle handles an action.
-func (s *State) Handle(a *Action) error {
+func (s *State) Handle(a *Action, playerID int) error {
 	s.Lock()
 	defer s.Unlock()
+	defer s.notify()
 
 	if a.Act == ActNoOp {
-		s.notify()
 		return nil
 	}
 
@@ -30,9 +30,17 @@ func (s *State) Handle(a *Action) error {
 	case StateInGame:
 		switch a.Act {
 		case ActPlayCard:
+			if playerID != s.WhoseTurn {
+				// Not their turn
+				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
+			}
 			// TODO: check the card is valid play
 			// TODO: compute effects
 		case ActDiscard:
+			if playerID != s.WhoseTurn {
+				// Not their turn
+				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
+			}
 			// TODO: check the card is valid discard
 			// TODO: compute effects / draw new card
 		default:
@@ -54,6 +62,5 @@ func (s *State) Handle(a *Action) error {
 			return fmt.Errorf("bad action for StateGameOver [%d]", a.Act)
 		}
 	}
-	s.notify()
 	return nil
 }
