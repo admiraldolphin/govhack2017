@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"net"
-	"os"
 	"testing"
 
 	"github.com/admiraldolphin/govhack2017/server/game"
