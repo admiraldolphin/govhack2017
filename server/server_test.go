@@ -60,43 +60,43 @@ func TestGame(t *testing.T) {
 	players := map[int]*game.Player{
 		0: {
 			Name: "Player 0",
-			Hand: &game.Hand{
-				Actions: []*game.ActionCard{
-					{Name: "action0"},
-					{Name: "action1"},
-					{Name: "action2"},
-					{Name: "action3"},
-					{Name: "action4"},
-					{Name: "action5"},
-					{Name: "action6"},
+			Hand: &game.HandState{
+				Actions: []*game.ActionCardState{
+					{Card: &game.ActionCard{Name: "action0"}},
+					{Card: &game.ActionCard{Name: "action1"}},
+					{Card: &game.ActionCard{Name: "action2"}},
+					{Card: &game.ActionCard{Name: "action3"}},
+					{Card: &game.ActionCard{Name: "action4"}},
+					{Card: &game.ActionCard{Name: "action5"}},
+					{Card: &game.ActionCard{Name: "action6"}},
 				},
-				People: []*game.PersonCard{
-					{Name: "person0"},
-					{Name: "person1"},
-					{Name: "person2"},
-					{Name: "person3"},
-					{Name: "person4"},
+				People: []*game.PersonCardState{
+					{Card: &game.PersonCard{Name: "person0"}},
+					{Card: &game.PersonCard{Name: "person1"}},
+					{Card: &game.PersonCard{Name: "person2"}},
+					{Card: &game.PersonCard{Name: "person3"}},
+					{Card: &game.PersonCard{Name: "person4"}},
 				},
 			},
 		},
 		1: {
 			Name: "Player 1",
-			Hand: &game.Hand{
-				Actions: []*game.ActionCard{
-					{Name: "action7"},
-					{Name: "action8"},
-					{Name: "action9"},
-					{Name: "action10"},
-					{Name: "action11"},
-					{Name: "action12"},
-					{Name: "action13"},
+			Hand: &game.HandState{
+				Actions: []*game.ActionCardState{
+					{Card: &game.ActionCard{Name: "action7"}},
+					{Card: &game.ActionCard{Name: "action8"}},
+					{Card: &game.ActionCard{Name: "action9"}},
+					{Card: &game.ActionCard{Name: "action10"}},
+					{Card: &game.ActionCard{Name: "action11"}},
+					{Card: &game.ActionCard{Name: "action12"}},
+					{Card: &game.ActionCard{Name: "action13"}},
 				},
-				People: []*game.PersonCard{
-					{Name: "person5"},
-					{Name: "person6"},
-					{Name: "person7"},
-					{Name: "person8"},
-					{Name: "person9"},
+				People: []*game.PersonCardState{
+					{Card: &game.PersonCard{Name: "person5"}},
+					{Card: &game.PersonCard{Name: "person6"}},
+					{Card: &game.PersonCard{Name: "person7"}},
+					{Card: &game.PersonCard{Name: "person8"}},
+					{Card: &game.PersonCard{Name: "person9"}},
 				},
 			},
 		},
@@ -171,16 +171,16 @@ func TestGame(t *testing.T) {
 		}
 
 		if got, want := r.State.State, p.want.State; got != want {
-			t.Errorf("After message %d [%v]: state.State = %v, want %v", i, p.action, got, want)
+			t.Errorf("After message %d [%v]: state.State = %#v, want %#v", i, p.action, got, want)
 		}
 		if got, want := r.State.Players, p.want.Players; !reflect.DeepEqual(got, want) {
-			t.Errorf("After message %d [%v]: state.Players = %v, want %v", i, p.action, got, want)
+			t.Errorf("After message %d [%v]: state.Players = %#v, want %#v", i, p.action, got, want)
 		}
 		if got, want := r.State.WhoseTurn, p.want.WhoseTurn; got != want {
-			t.Errorf("After message %d [%v]: state.WhoseTurn = %v, want %v", i, p.action, got, want)
+			t.Errorf("After message %d [%v]: state.WhoseTurn = %#v, want %#v", i, p.action, got, want)
 		}
 		if got, want := r.State.Clock, p.want.Clock; got != want {
-			t.Errorf("After message %d [%v]: state.Clock = %v, want %v", i, p.action, got, want)
+			t.Errorf("After message %d [%v]: state.Clock = %#v, want %#v", i, p.action, got, want)
 		}
 	}
 }
