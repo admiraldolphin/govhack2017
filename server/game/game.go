@@ -150,11 +150,12 @@ func (s *State) startGame() {
 	s.WhoseTurn = -1
 	s.advance()
 
-	// TODO: shuffle deck
+	s.deck = s.baseDeck.Instance()
+	s.deck.Shuffle()
 	for _, p := range s.Players {
-		p.Hand.Actions = make([]ActionCard, ActionHandSize)
-		p.Hand.People = make([]PersonCard, PeopleHandSize)
-
-		// TODO: deal cards
+		p.Hand = &Hand{
+			Actions: s.deck.DrawActions(ActionHandSize),
+			People:  s.deck.DrawPeople(PeopleHandSize),
+		}
 	}
 }

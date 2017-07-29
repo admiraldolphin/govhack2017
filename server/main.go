@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	s := server{state: game.New()}
+	s := server{state: game.New(testDeck)}
 
 	// Set up HTTP handlers
 	http.HandleFunc("/helloz", func(w http.ResponseWriter, r *http.Request) {
