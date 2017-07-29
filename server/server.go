@@ -13,6 +13,24 @@ type server struct {
 	state *game.State
 }
 
+func (s *server) listenAndServe(addr string) error {
+	// Start listening on game port.
+	gl, err := net.Listen("tcp", addr)
+	if err != nil {
+		return err
+	}
+	go func() {
+		for {
+			conn, err := gl.Accept()
+			if err != nil {
+				log.Printf("Couldn't accept connection: %v", err)
+			}
+			go s.handleConnection(conn)
+		}
+	}()
+	return nil
+}
+
 func (s *server) handleConnection(conn net.Conn) {
 	defer conn.Close()
 	stop := make(chan struct{})
