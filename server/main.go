@@ -9,14 +9,14 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/admiraldolphin/govhack2017/server/types"
+	"github.com/admiraldolphin/govhack2017/server/game"
 )
 
 var (
 	gamePort = flag.Int("game_port", 23456, "Port for the game to listen on")
 	httpPort = flag.Int("http_port", 23480, "Port the webserver listens on")
 
-	state   types.State
+	state   game.State
 	stateMu sync.RWMutex
 )
 
