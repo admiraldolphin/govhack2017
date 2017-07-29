@@ -1,0 +1,20 @@
+{
+	"_comment1": "death cards match the icon file name",
+	"_comment2": "life-event cards would also have a decade associated:",
+	"_comment3": "an 1840s le_birth card would trigger births for 1840-1850",
+	
+	"death": ["dc_acid", "dc_age", "dc_alcohol", "dc_brain", "dc_bridge",
+		"dc_bull", "dc_burning", "dc_crushing", "dc_drowning", "dc_explosion",
+		"dc_exposure", "dc_falling", "dc_gunshot", "dc_heart", "dc_horse",
+		"dc_illness", "dc_inhalaiton", "dc_lungs", "dc_medicine", "dc_mining",
+		"dc_misc", "dc_poison", "dc_scalding", "dc_shipwreck", "dc_shock",
+		"dc_snakebite", "dc_stabbing", "dc_starvation", "dc_stomach",
+		"dc_train", "dc_tree", "dc_unexplained", "dc_visitation", "dc_wagon",
+		"dc_wheel"],
+		
+	"life_event": ["le_bankruptcy", "le_birth", "le_census", "le_convict",
+		"le_court", "le_health_welfare", "le_immigration", "le_marriage"],
+		
+	"decade": ["1830", "1840", "1850", "1860", "1870", "1890", "1900", "1910",
+		"1920", "1930"]
+}

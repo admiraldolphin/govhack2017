@@ -40,6 +40,7 @@ type ActionCardState struct {
 // Trait is a condition which match person cards, and are
 // played by action cards.
 type Trait struct {
+	Key   string `json:"key"`
 	Name  string `json:"name"`
 	Death bool   `json:"death"`
 }

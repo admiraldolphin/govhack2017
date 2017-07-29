@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"net"
-	"reflect"
 	"testing"
 
 	"github.com/admiraldolphin/govhack2017/server/game"
+
+	"github.com/kr/pretty"
 )
 
 func TestGame(t *testing.T) {
@@ -312,8 +313,8 @@ func TestGame(t *testing.T) {
 		if got, want := r.State.State, p.want.State; got != want {
 			t.Errorf("After message %d [%v]: state.State = %#v, want %#v", i, p.action, got, want)
 		}
-		if got, want := r.State.Players, p.want.Players; !reflect.DeepEqual(got, want) {
-			t.Errorf("After message %d [%v]: state.Players = %#v, want %#v", i, p.action, got, want)
+		if diff := pretty.Diff(p.want.Players, r.State.Players); len(diff) > 0 {
+			t.Errorf("After message %d [%v]: state.Players diff (-want +got): %v", i, p.action, diff)
 		}
 		if got, want := r.State.WhoseTurn, p.want.WhoseTurn; got != want {
 			t.Errorf("After message %d [%v]: state.WhoseTurn = %#v, want %#v", i, p.action, got, want)
