@@ -74,7 +74,7 @@ func (s *State) playOrDiscard(p *Player, a *Action) error {
 		cs.Played = true
 		p.Played = append(p.Played, cs)
 
-		s.tallyEffects(p, cs.Card)
+		s.tallyEffects(cs.Card)
 	case ActDiscard:
 		cs.Discarded = true
 		p.Discarded = append(p.Discarded, cs)
@@ -86,13 +86,35 @@ func (s *State) playOrDiscard(p *Player, a *Action) error {
 		copy(p.Hand.Actions[a.Card:], p.Hand.Actions[a.Card+1:])
 		p.Hand.Actions = p.Hand.Actions[:len(p.Hand.Actions)-1]
 	} else {
+		// Replace card.
 		p.Hand.Actions[a.Card] = nc[0]
 	}
 	return nil
 }
 
-func (s *State) tallyEffects(p *Player, ac *ActionCard) {
-	// TODO
+// MUST GUARD WITH LOCK
+func (s *State) tallyEffects(ac *ActionCard) {
+	for _, p := range s.Players {
+		for _, pc := range p.Hand.People {
+			for ti, t := range pc.Card.Traits {
+				if ac.Trait.Key != t.Key {
+					continue
+				}
+				if pc.Dead {
+					// Rule: Once dead, people don't accumulate points
+					continue
+				}
+				// Record effects
+				pc.CompletedTraits = append(pc.CompletedTraits, ti)
+				pc.Score++ // Score attributed to this card
+				pc.Dead = ac.Trait.Death
+				if pc.Dead {
+					// The person was just killed; add points to player.
+					p.Score += pc.Score
+				}
+			}
+		}
+	}
 }
 
 // advance advances whose-turn to the next player, and game clock
