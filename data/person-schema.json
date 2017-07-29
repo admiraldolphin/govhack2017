@@ -5,7 +5,7 @@
 	
 	"name": "Adams, William",
 	"inquest": { "death_date": "23 Jan 1900", "death_verdict": "Natural causes",
-		"death_causes": ["HORSE","WATER"],
+		"death_causes": ["dc_horse","dc_falling"],
 		"year": "1900", "permalink": "https://..."},
 		
 	"birth": { "birth_date": "25 Nov 1870", "birth_place": "Launceston",
