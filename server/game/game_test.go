@@ -17,6 +17,8 @@ func TestNextPlayer(t *testing.T) {
 	tests := []struct {
 		after, want int
 	}{
+		{after: -1, want: 2},
+		{after: 0, want: 2},
 		{after: 1, want: 2},
 		{after: 2, want: 3},
 		{after: 3, want: 5},
