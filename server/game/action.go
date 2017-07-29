@@ -5,8 +5,7 @@ type Act int
 
 // The acts.
 const (
-	ActJoinGame Act = iota
-	ActStartGame
+	ActStartGame Act = iota
 	ActPlayCard
 	ActDiscard
 )

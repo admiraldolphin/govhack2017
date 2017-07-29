@@ -34,6 +34,16 @@ func New() *State {
 	}
 }
 
+// AddPlayer adds a player.
+func (s *State) AddPlayer() (id int) {
+	s.Lock()
+	id = len(s.Players)
+	s.Players = append(s.Players, Player{})
+	s.Unlock()
+	s.Notify()
+	return
+}
+
 // Changed returns a channel closed when the state has changed.
 func (s *State) Changed() <-chan struct{} {
 	s.RLock()

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"io"
 	"log"
 	"net"
 
@@ -36,9 +37,15 @@ func (s *server) listenAndServe(addr string) error {
 	return nil
 }
 
+type playerID struct{}
+
 func (s *server) handleConnection(ctx context.Context, conn net.Conn) {
-	defer conn.Close()
 	cctx, canc := context.WithCancel(ctx)
+
+	// Assign the player a number.
+	id := s.state.AddPlayer()
+	cctx = context.WithValue(cctx, playerID{}, id)
+
 	go func() {
 		if err := s.handleInbound(cctx, conn); err != nil {
 			log.Printf("Handling inbound stream: %v", err)
@@ -47,7 +54,7 @@ func (s *server) handleConnection(ctx context.Context, conn net.Conn) {
 	}()
 	go func() {
 		if err := s.handleOutbound(cctx, conn); err != nil {
-			log.Printf("Handling outbout stream: %v", err)
+			log.Printf("Handling outboud stream: %v", err)
 			canc()
 		}
 	}()
@@ -76,14 +83,30 @@ func (s *server) handleInbound(ctx context.Context, conn net.Conn) error {
 }
 
 func (s *server) handleOutbound(ctx context.Context, conn net.Conn) error {
+	defer conn.Close()
 	for {
 		select {
 		case <-s.state.Changed():
-			if err := s.state.Dump(conn); err != nil {
+			if err := s.respond(ctx, conn); err != nil {
 				return err
 			}
 		case <-ctx.Done():
 			return ctx.Err()
 		}
 	}
+}
+
+type response struct {
+	PlayerID int         `json:"you"`
+	State    *game.State `json:"state"`
+}
+
+func (s *server) respond(ctx context.Context, w io.Writer) error {
+	s.state.RLock()
+	defer s.state.RUnlock()
+	resp := response{
+		PlayerID: ctx.Value(playerID{}).(int),
+		State:    s.state,
+	}
+	return json.NewEncoder(w).Encode(resp)
 }
