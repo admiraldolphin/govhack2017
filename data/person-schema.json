@@ -1,0 +1,38 @@
+{
+	"_comment1": "name and inquest objects are required,",
+	"_comment2": "must have at least one of birth, immigration or convict objects,",
+	"_comment3": "all other objects are optional,",
+	
+	"name": "Adams, William",
+	"inquest": { "death_date": "23 Jan 1900", "death_verdict": "Natural causes",
+		"death_causes": ["HORSE","WATER"],
+		"year": "1900", "permalink": "https://..."},
+		
+	"birth": { "birth_date": "25 Nov 1870", "birth_place": "Launceston",
+		"birth_mother": "Windus, Louisa Mary", "birth_father": "Weavell, Henry",
+		"year": "1870", "permalink": "https://..."},
+		
+	"immigration": { "immigration_date": "9-Dec-24", "from_country": "England",
+		"year": "1924", "permalink": "https://..."},
+		
+	"convict": { "departure_date": "23 Mar 1844", "convict_port": "Portsmouth",
+		"convict_ship": "London (1)", "year": "1844", "permalink": "https://..."},
+	
+	"bankruptcy": { "bankrupt_date": "04 Apr 1829", "year": "1829",
+		"permalink": "https://..."},
+		
+	"marriage": { "marriage_date": "01 Jul 1804",
+		"spouse_name": "Cummings, Elizabeth", "marriage_place": "Hobart",
+		"year": "1804", "permalink": "https://..." },
+		
+	"court": { "trial_date": "10 Oct 1835", "trial_offence": "Sheep stealing",
+		"year": "1835", "permalink": "https://..."},
+		
+	"health-welfare": { "admission_date": "Dec 1830",
+		"porperty": "New Norfolk Colonial Hospital",
+		"remarks": "Admitted with syphilis", "year": "1830",
+		"permalink": "https://..."},
+		
+	"census": { "census_year": "1843", "census_place": "Hobart",
+		"census_children": "Yes", "year": "1843", "permalink": "https://..."}
+}

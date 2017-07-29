@@ -10,7 +10,7 @@ import (
 )
 
 func TestGame(t *testing.T) {
-	s := server{state: game.New()}
+	s := server{state: game.New(testDeck)}
 	r := &response{}
 	if err := s.listenAndServe("localhost:0"); err != nil {
 		t.Fatalf("Couldn't start game server: %v", err)
@@ -57,6 +57,51 @@ func TestGame(t *testing.T) {
 		t.Errorf("response.State.State = %d, want %d", got, want)
 	}
 
+	players := map[int]*game.Player{
+		0: {
+			Name: "Player 0",
+			Hand: &game.Hand{
+				Actions: []*game.ActionCard{
+					{Name: "action0"},
+					{Name: "action1"},
+					{Name: "action2"},
+					{Name: "action3"},
+					{Name: "action4"},
+					{Name: "action5"},
+					{Name: "action6"},
+				},
+				People: []*game.PersonCard{
+					{Name: "person0"},
+					{Name: "person1"},
+					{Name: "person2"},
+					{Name: "person3"},
+					{Name: "person4"},
+				},
+			},
+		},
+		1: {
+			Name: "Player 1",
+			Hand: &game.Hand{
+				Actions: []*game.ActionCard{
+					{Name: "action7"},
+					{Name: "action8"},
+					{Name: "action9"},
+					{Name: "action10"},
+					{Name: "action11"},
+					{Name: "action12"},
+					{Name: "action13"},
+				},
+				People: []*game.PersonCard{
+					{Name: "person5"},
+					{Name: "person6"},
+					{Name: "person7"},
+					{Name: "person8"},
+					{Name: "person9"},
+				},
+			},
+		},
+	}
+
 	// Play a game!
 	g := []struct {
 		send   *json.Encoder
@@ -70,23 +115,8 @@ func TestGame(t *testing.T) {
 			recv:   recv1,
 			action: &game.Action{Act: game.ActStartGame},
 			want: &game.State{
-				State: game.StateInGame,
-				Players: map[int]*game.Player{
-					0: {
-						Name: "Player 0",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-					1: {
-						Name: "Player 1",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-				},
+				State:     game.StateInGame,
+				Players:   players,
 				WhoseTurn: 0,
 				Clock:     0,
 			},
@@ -97,23 +127,8 @@ func TestGame(t *testing.T) {
 			recv:   recv0,
 			action: &game.Action{Act: game.ActPlayCard},
 			want: &game.State{
-				State: game.StateInGame,
-				Players: map[int]*game.Player{
-					0: {
-						Name: "Player 0",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-					1: {
-						Name: "Player 1",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-				},
+				State:     game.StateInGame,
+				Players:   players,
 				WhoseTurn: 1,
 				Clock:     0,
 			},
@@ -124,23 +139,8 @@ func TestGame(t *testing.T) {
 			recv:   recv0,
 			action: &game.Action{Act: game.ActNoOp},
 			want: &game.State{
-				State: game.StateInGame,
-				Players: map[int]*game.Player{
-					0: {
-						Name: "Player 0",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-					1: {
-						Name: "Player 1",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-				},
+				State:     game.StateInGame,
+				Players:   players,
 				WhoseTurn: 1,
 				Clock:     0,
 			},
@@ -151,23 +151,8 @@ func TestGame(t *testing.T) {
 			recv:   recv1,
 			action: &game.Action{Act: game.ActDiscard},
 			want: &game.State{
-				State: game.StateInGame,
-				Players: map[int]*game.Player{
-					0: {
-						Name: "Player 0",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-					1: {
-						Name: "Player 1",
-						Hand: game.Hand{
-							Actions: make([]game.ActionCard, game.ActionHandSize),
-							People:  make([]game.PersonCard, game.PeopleHandSize),
-						},
-					},
-				},
+				State:     game.StateInGame,
+				Players:   players,
 				WhoseTurn: 0,
 				Clock:     1,
 			},

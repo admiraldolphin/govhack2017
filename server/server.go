@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -119,4 +120,20 @@ func (s *server) respond(ctx context.Context, w io.Writer, playerID int) error {
 		State:    s.state,
 	}
 	return json.NewEncoder(w).Encode(resp)
+}
+
+// TODO: make this unit test data only
+var testDeck = &game.RiggedDeck{}
+
+func init() {
+	for i := 0; i < 50; i++ {
+		testDeck.People = append(testDeck.People, &game.PersonCard{
+			Name: fmt.Sprintf("person%d", i),
+		})
+	}
+	for i := 0; i < 50; i++ {
+		testDeck.Actions = append(testDeck.Actions, &game.ActionCard{
+			Name: fmt.Sprintf("action%d", i),
+		})
+	}
 }

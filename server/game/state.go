@@ -23,17 +23,22 @@ type State struct {
 	Clock     int             `json:"clock"`
 	WhoseTurn int             `json:"whose_turn"`
 
+	// Fields for managing the game.
+	nextID   int
+	baseDeck Deck
+	deck     Deck
+
 	// Fields for coordinating state.
 	changedNote chan struct{}
 	mu          sync.RWMutex
-	nextID      int
 }
 
 // New returns a new game state.
-func New() *State {
+func New(deck Deck) *State {
 	return &State{
 		Players:     make(map[int]*Player),
 		changedNote: make(chan struct{}),
+		baseDeck:    deck,
 	}
 }
 
@@ -67,14 +72,8 @@ func (s *State) RUnlock() { s.mu.RUnlock() }
 // Player is the state relative to a particular player.
 type Player struct {
 	Name  string `json:"name"`
-	Hand  Hand   `json:"hand"`
+	Hand  *Hand  `json:"hand"`
 	Score int    `json:"score"`
-}
-
-// Hand is some cards that a player has.
-type Hand struct {
-	People  []PersonCard `json:"people"`
-	Actions []ActionCard `json:"actions"`
 }
 
 // PersonCard models a game card.
