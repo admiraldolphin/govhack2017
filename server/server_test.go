@@ -65,6 +65,7 @@ func TestGame(t *testing.T) {
 		want   *game.State
 	}{
 		{
+			// Player 2 starts the game
 			send:   send2,
 			recv:   recv2,
 			action: &game.Action{Act: game.ActStartGame},
@@ -76,6 +77,7 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
+			// Player 1 plays a card
 			send:   send1,
 			recv:   recv1,
 			action: &game.Action{Act: game.ActPlayCard},
@@ -87,6 +89,7 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
+			// Player 2 discards a card
 			send:   send2,
 			recv:   recv2,
 			action: &game.Action{Act: game.ActDiscard},
