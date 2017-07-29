@@ -154,7 +154,7 @@ func (s *State) startGame() {
 	s.deck = s.baseDeck.Instance()
 	s.deck.Shuffle()
 	for _, p := range s.Players {
-		p.Hand = &Hand{
+		p.Hand = &HandState{
 			Actions: s.deck.DrawActions(ActionHandSize),
 			People:  s.deck.DrawPeople(PeopleHandSize),
 		}
