@@ -14,7 +14,6 @@ const (
 
 // Action is all info needed from the frontend to act.
 type Action struct {
-	Act    Act `json:"act"`
-	Player int `json:"player"`
-	Card   int `json:"card"`
+	Act  Act `json:"act"`
+	Card int `json:"card"`
 }
