@@ -1,142 +1,221 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text;
+using UnityEngine;
+using System.Linq;
+using System.Collections.Generic;
 
+// State object for receiving data from remote device.  
+public class StateObject
+{
+    // Client socket.  
+    public Socket workSocket = null;
+    // Size of receive buffer.  
+    public const int BufferSize = 256;
+    // Receive buffer.  
+    public byte[] buffer = new byte[BufferSize];
+    // Received data string.  
+    public StringBuilder sb = new StringBuilder();
+}
 
-public class ServerConnection : MonoBehaviour {
+public class ServerConnection : MonoBehaviour
+{
+    // The port number for the remote device.  
+    private const int port = 23456;
 
+    // The response from the remote device.  
+    private static String response = String.Empty;
 
-    class Connection
+    private static Socket socket;
+
+    private static void StartClient()
     {
-
-        private static Thread thread;
-
-        private static Queue<string> outgoingMessages = new Queue<string>();
-        private static Queue<string> incomingMessages = new Queue<string>();
-
-        public static void PutMessage(string message)
+        // Connect to a remote device.  
+        try
         {
-            Monitor.Enter(outgoingMessages);
+            // Establish the remote endpoint for the socket.  
+            // The name of the   
+            // remote device is "host.contoso.com".  
+            
 
-            outgoingMessages.Enqueue(message);
+            IPHostEntry ipHostInfo = Dns.Resolve("localhost");
+            IPAddress ipAddress = ipHostInfo
+                .AddressList
+                .Where(address => address.AddressFamily == AddressFamily.InterNetwork)
+                .First();
+            
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
-            Monitor.Exit(outgoingMessages);
-        }
+            // Create a TCP/IP socket.  
+            socket = new Socket(AddressFamily.InterNetwork,
+                SocketType.Stream, ProtocolType.Tcp);
 
-        public static string GetMessage()
-        {
-            if (Monitor.TryEnter(incomingMessages))
-            {
-                try
-                {
-                    if (incomingMessages.Count > 0)
-                    {
-                        return incomingMessages.Dequeue();
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                } finally {
-                    Monitor.Exit(incomingMessages);
-                }
-            }
-            return null;
+            // Connect to the remote endpoint.  
+            socket.BeginConnect(remoteEP,
+                new AsyncCallback(ConnectCallback), socket);
             
         }
-
-        private static void RunCommunication()
+        catch (Exception e)
         {
+            Debug.LogFormat(e.ToString());
+        }
+    }
 
-            PutMessage("Connecting to " + host + ":" + port);
-            var client = new TcpClient(host, port);
+    private static void ConnectCallback(IAsyncResult ar)
+    {
+        try
+        {
+            // Retrieve the socket from the state object.  
+            Socket client = (Socket)ar.AsyncState;
 
-            var stream = client.GetStream();
+            // Complete the connection.  
+            client.EndConnect(ar);
 
-            PutMessage("Connected to " + host + ":" + port);
+            Debug.LogFormat("Socket connected to {0}",
+                client.RemoteEndPoint.ToString());
 
-            var incomingBytes = new List<byte>();
+            Receive(client);
+        }
+        catch (Exception e)
+        {
+            Debug.LogFormat(e.ToString());
+        }
+    }
 
-            while (true)
+    private static void Receive(Socket client)
+    {
+        try
+        {
+            // Create the state object.  
+            StateObject state = new StateObject();
+            state.workSocket = client;
+
+            // Begin receiving the data from the remote device.  
+            client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReceiveCallback), state);
+        }
+        catch (Exception e)
+        {
+            Debug.LogFormat(e.ToString());
+        }
+    }
+
+    public Queue<string> messages = new Queue<string>();
+
+    private static void ReceiveCallback(IAsyncResult ar)
+    {
+        try
+        {
+            // Retrieve the state object and the client socket   
+            // from the asynchronous state object.  
+            StateObject state = (StateObject)ar.AsyncState;
+            Socket client = state.workSocket;
+
+            // Read data from the remote device.  
+            int bytesRead = client.EndReceive(ar);
+
+            if (bytesRead > 0)
             {
-                // Deliver the next outgoing message
-                Monitor.Enter(outgoingMessages);
 
-                if (outgoingMessages.Count > 0)
+                var dataSoFar = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
+
+                if (dataSoFar.Contains('\n'))
                 {
-                    var nextOutgoingMessage = outgoingMessages.Dequeue();
+                    // This is the end of the command.
+                    // We might have more data after this, so split.
 
-                    var outBytes = System.Text.Encoding.UTF8.GetBytes(nextOutgoingMessage);
+                    var splitData = new Queue<string>( dataSoFar.Split('\n'));
 
-                    stream.Write(outBytes, 0, outBytes.Length);
+                    while (splitData.Count > 1)
+                    {
+                        var command = splitData.Dequeue();
+
+                        state.sb.Append(command);
+                        
+                        MessageReceived(state.sb.ToString());
+
+                        // Replace the stringbuilder
+                        state.sb = new StringBuilder();
+                    }
+                    
+                    // Put any data that wasn't part of a command on the buffer
+                    state.sb.Append(splitData.Dequeue());
+                    
+                } else
+                {
+                    // There might be more data, so store the data received so far.  
+                    state.sb.Append(dataSoFar);
+
                 }
 
-                Monitor.Exit(outgoingMessages);
 
-                // Read data; add data to the queue if able
-                if (stream.DataAvailable)
-                {
-                    var nextByte = (byte)stream.ReadByte();
-
-                    if (nextByte == '\n')
-                    {
-                        var bytes = incomingBytes.ToArray();
-
-                        var message = System.Text.Encoding.UTF8.GetString(bytes);
-
-                        PutMessage(message);
-
-                        incomingBytes.Clear();
-                    } else
-                    {
-                        incomingBytes.Add(nextByte);
-                    }
-                }              
+                // Get the rest of the data.  
+                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReceiveCallback), state);
             }
+        }
+        catch (Exception e)
+        {
+            Debug.LogFormat(e.ToString());
+        }
+    }
+
+    private static void Send(String data)
+    {
+        Debug.LogFormat("Sending: {0}", data);
+        // Convert the string data to byte data using ASCII encoding.  
+        byte[] byteData = Encoding.ASCII.GetBytes(data);
+
+        // Begin sending the data to the remote device.  
+        socket.BeginSend(byteData, 0, byteData.Length, 0,
+            new AsyncCallback(SendCallback), socket);
+    }
+
+    private static void SendCallback(IAsyncResult ar)
+    {
+        try
+        {
+            // Retrieve the socket from the state object.  
+            Socket client = (Socket)ar.AsyncState;
+
+            // Complete sending the data to the remote device.  
+            int bytesSent = client.EndSend(ar);
+            //Debug.LogFormat("Sent {0} bytes to server.", bytesSent);
             
         }
-
-        private static string host;
-        private static int port;
-
-        public static void Connect(string host, int port)
+        catch (Exception e)
         {
-            if (thread != null)
-            {
-                thread.Abort();
-            }
-            Connection.host = host;
-            Connection.port = port;
-
-            thread = new Thread(new ThreadStart(RunCommunication));
-            thread.IsBackground = true;
-            thread.Start();
+            Debug.LogFormat(e.ToString());
         }
     }
-    
-    public string host = "localhost";
-    public int port = 23456;
 
-    public void Awake()
-    {
-        Connection.Connect(host, port);
-    }
-
-    // Update is called once per frame
-    void Update () {
-		
-        var message = Connection.GetMessage();
-
-        if (message != null)
-        {
-            Debug.LogFormat("Message: {0}", message);
-        }
-	}
+    public static event Action<string> MessageReceived;
 
     public void SendMessageToServer(string message)
     {
-        Connection.PutMessage(message);
+        Send(message + "\n");
+    }
+
+    private void Awake()
+    {
+        MessageReceived += ServerConnection_MessageReceived;
+        StartClient();
+    }
+
+    private void ServerConnection_MessageReceived(string obj)
+    {
+        Debug.Log("Message received: " + obj);
+    }
+
+    public void SendNoOp()
+    {
+        SendMessageToServer("{}");
+    }
+
+    public void SendStartGame()
+    {
+        SendMessageToServer(@"{""action"": 1}");
     }
 }
