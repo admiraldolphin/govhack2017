@@ -1,8 +1,15 @@
 package game
 
-// Broad states.
+import (
+	"sync"
+)
+
+// Statum is some made up latin.
+type Statum int
+
+// Broad states (statums).
 const (
-	StateNoGame = iota
+	StateNoGame Statum = iota
 	StateLobby
 	StateInGame
 	StateGameOver
@@ -10,14 +17,40 @@ const (
 
 // State models the entire game state.
 type State struct {
-	State   int      `json:"state"`
+	State   Statum   `json:"state"`
 	Players []Player `json:"players"`
 
+	// Non-JSON fields for coordinating state.
 	changedNote chan struct{}
+	mu          sync.RWMutex
+}
+
+// New returns a new game state.
+func New() *State {
+	return &State{
+		changedNote: make(chan struct{}),
+	}
 }
 
 // Changed returns a channel closed when the state has changed.
-func (s *State) Changed() <-chan struct{} { return s.changedNote }
+func (s *State) Changed() <-chan struct{} {
+	s.RLock()
+	defer s.RUnlock()
+	return s.changedNote
+}
+
+// Notify notifies all listeners (on the channel return from Changed) that the state has changed.
+func (s *State) Notify() {
+	s.Lock()
+	close(s.changedNote)
+	s.changedNote = make(chan struct{})
+	s.Unlock()
+}
+
+func (s *State) Lock()    { s.mu.Lock() }
+func (s *State) Unlock()  { s.mu.Unlock() }
+func (s *State) RLock()   { s.mu.RLock() }
+func (s *State) RUnlock() { s.mu.RUnlock() }
 
 // Player is the state relative to a particular player.
 type Player struct {
