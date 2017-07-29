@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"log"
 	"net"
@@ -8,37 +9,45 @@ import (
 	"github.com/admiraldolphin/govhack2017/server/game"
 )
 
-func handleConnection(conn net.Conn) {
+type server struct {
+	state *game.State
+}
+
+func (s *server) handleConnection(conn net.Conn) {
 	defer conn.Close()
 	stop := make(chan struct{})
-	q := make(chan game.Act, 10)
 	go func() {
-		d := json.NewDecoder(conn)
+		rd := bufio.NewReader(conn)
 		for {
 			select {
 			default:
 			case <-stop:
 				return
 			}
-			var m game.Act
-			if err := d.Decode(&m); err != nil {
+			var m game.Action
+			msg, err := rd.ReadBytes('\n')
+			if err != nil {
+				log.Printf("Couldn't read a message: %v", err)
+				close(stop)
+				return
+			}
+			if err := json.Unmarshal(msg, &m); err != nil {
 				log.Printf("Couldn't decode message: %v", err)
 				close(stop)
 				return
 			}
-			q <- m
+			if err := s.state.Handle(&m); err != nil {
+				log.Printf("Couldn't handle message: %v", err)
+				close(stop)
+				return
+			}
 		}
 	}()
 
 	for {
 		select {
-		case m := <-q:
-			// TODO: handle incoming message
-			log.Printf("Got incoming message: %v", m)
-		case <-state.Changed():
-			state.RLock()
-			defer state.RUnlock()
-			if err := json.NewEncoder(conn).Encode(state); err != nil {
+		case <-s.state.Changed():
+			if err := s.state.Dump(conn); err != nil {
 				log.Printf("Couldn't encode state: %v", err)
 				close(stop)
 				return

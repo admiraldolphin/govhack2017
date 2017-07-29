@@ -1,6 +1,8 @@
 package game
 
 import (
+	"encoding/json"
+	"io"
 	"sync"
 )
 
@@ -39,6 +41,13 @@ func (s *State) Changed() <-chan struct{} {
 	return s.changedNote
 }
 
+// Dump writes the state to a writer in JSON.
+func (s *State) Dump(w io.Writer) error {
+	s.RLock()
+	defer s.RUnlock()
+	return json.NewEncoder(w).Encode(s)
+}
+
 // Notify notifies all listeners (on the channel return from Changed) that the state has changed.
 func (s *State) Notify() {
 	s.Lock()
@@ -68,9 +77,11 @@ type Hand struct {
 // PersonCard models a game card.
 type PersonCard struct {
 	Name string `json:"name"`
+	// TODO
 }
 
 // ActionCard models a game card.
 type ActionCard struct {
 	Name string `json:"name"`
+	// TODO
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -14,21 +13,17 @@ import (
 var (
 	gamePort = flag.Int("game_port", 23456, "Port for the game to listen on")
 	httpPort = flag.Int("http_port", 23480, "Port the webserver listens on")
-
-	state = &game.State{}
 )
 
 func main() {
+	s := server{state: game.New()}
+
 	// Set up HTTP handlers
 	http.HandleFunc("/helloz", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Hello, world!\n")
 	})
 	http.HandleFunc("/statusz", func(w http.ResponseWriter, r *http.Request) {
-		state.RLock()
-		defer state.RUnlock()
-		if err := json.NewEncoder(w).Encode(state); err != nil {
-			log.Printf("Couldn't encode state response: %v", err)
-		}
+		s.state.Dump(w)
 	})
 
 	// Start listening on game port.
@@ -42,7 +37,7 @@ func main() {
 			if err != nil {
 				log.Printf("Couldn't accept connection: %v", err)
 			}
-			go handleConnection(conn)
+			go s.handleConnection(conn)
 		}
 	}()
 
