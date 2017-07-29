@@ -17,17 +17,17 @@ func TestGame(t *testing.T) {
 	}
 	defer s.Close()
 
-	conn1, err := net.Dial("tcp", s.Addr().String())
+	conn0, err := net.Dial("tcp", s.Addr().String())
 	if err != nil {
 		t.Fatalf("Couldn't connect player 0 to game server: %v", err)
 	}
-	defer conn1.Close()
+	defer conn0.Close()
 
-	send1 := json.NewEncoder(conn1)
-	recv1 := json.NewDecoder(conn1)
+	send0 := json.NewEncoder(conn0)
+	recv0 := json.NewDecoder(conn0)
 
 	// Should get a response immediately
-	if err := recv1.Decode(r); err != nil {
+	if err := recv0.Decode(r); err != nil {
 		t.Fatalf("Couldn't get state immediately: %v", err)
 	}
 	if got, want := r.PlayerID, 0; got != want {
@@ -37,17 +37,17 @@ func TestGame(t *testing.T) {
 		t.Errorf("response.State.State = %d, want %d", got, want)
 	}
 
-	conn2, err := net.Dial("tcp", s.Addr().String())
+	conn1, err := net.Dial("tcp", s.Addr().String())
 	if err != nil {
 		t.Fatalf("Couldn't connect player 1 to game server: %v", err)
 	}
-	defer conn2.Close()
+	defer conn1.Close()
 
-	send2 := json.NewEncoder(conn2)
-	recv2 := json.NewDecoder(conn2)
+	send1 := json.NewEncoder(conn1)
+	recv1 := json.NewDecoder(conn1)
 
 	// Should get a response immediately
-	if err := recv2.Decode(r); err != nil {
+	if err := recv1.Decode(r); err != nil {
 		t.Fatalf("Couldn't get state immediately: %v", err)
 	}
 	if got, want := r.PlayerID, 1; got != want {
@@ -65,9 +65,9 @@ func TestGame(t *testing.T) {
 		want   *game.State
 	}{
 		{
-			// Player 2 starts the game
-			send:   send2,
-			recv:   recv2,
+			// Player 1 starts the game
+			send:   send1,
+			recv:   recv1,
 			action: &game.Action{Act: game.ActStartGame},
 			want: &game.State{
 				State: game.StateInGame,
@@ -92,9 +92,9 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
-			// Player 1 plays a card
-			send:   send1,
-			recv:   recv1,
+			// Player 0 plays a card
+			send:   send0,
+			recv:   recv0,
 			action: &game.Action{Act: game.ActPlayCard},
 			want: &game.State{
 				State: game.StateInGame,
@@ -119,9 +119,9 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
-			// Player 1 does a no-op
-			send:   send1,
-			recv:   recv1,
+			// Player 0 does a no-op
+			send:   send0,
+			recv:   recv0,
 			action: &game.Action{Act: game.ActNoOp},
 			want: &game.State{
 				State: game.StateInGame,
@@ -146,9 +146,9 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
-			// Player 2 discards a card
-			send:   send2,
-			recv:   recv2,
+			// Player 1 discards a card
+			send:   send1,
+			recv:   recv1,
 			action: &game.Action{Act: game.ActDiscard},
 			want: &game.State{
 				State: game.StateInGame,
@@ -178,11 +178,11 @@ func TestGame(t *testing.T) {
 		if err := p.send.Encode(p.action); err != nil {
 			t.Fatalf("Message %d [%v] got error %v", i, p.action, err)
 		}
+		if err := recv0.Decode(r); err != nil {
+			t.Errorf("After message %d [%v]: recv0.Decode = error %v", i, p.action, err)
+		}
 		if err := recv1.Decode(r); err != nil {
 			t.Errorf("After message %d [%v]: recv1.Decode = error %v", i, p.action, err)
-		}
-		if err := recv2.Decode(r); err != nil {
-			t.Errorf("After message %d [%v]: recv2.Decode = error %v", i, p.action, err)
 		}
 
 		if got, want := r.State.State, p.want.State; got != want {
