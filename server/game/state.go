@@ -11,25 +11,28 @@ type Statum int
 
 // Broad states (statums).
 const (
-	StateNoGame Statum = iota
-	StateLobby
+	StateLobby Statum = iota
 	StateInGame
 	StateGameOver
 )
 
 // State models the entire game state.
 type State struct {
-	State   Statum   `json:"state"`
-	Players []Player `json:"players"`
+	State     Statum          `json:"state"`
+	Players   map[int]*Player `json:"players"`
+	Clock     int             `json:"clock"`
+	WhoseTurn int             `json:"whose_turn"`
 
-	// Non-JSON fields for coordinating state.
+	// Fields for coordinating state.
 	changedNote chan struct{}
 	mu          sync.RWMutex
+	nextID      int
 }
 
 // New returns a new game state.
 func New() *State {
 	return &State{
+		Players:     make(map[int]*Player),
 		changedNote: make(chan struct{}),
 	}
 }
@@ -43,17 +46,17 @@ func (s *State) Changed() <-chan struct{} {
 
 // Dump writes the state to a writer in JSON.
 func (s *State) Dump(w io.Writer) error {
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "\t")
 	s.RLock()
 	defer s.RUnlock()
-	return json.NewEncoder(w).Encode(s)
+	return enc.Encode(s)
 }
 
-// Notify notifies all listeners (on the channel return from Changed) that the state has changed.
-func (s *State) Notify() {
-	s.Lock()
+// MUST GUARD WITH LOCK
+func (s *State) notify() {
 	close(s.changedNote)
 	s.changedNote = make(chan struct{})
-	s.Unlock()
 }
 
 func (s *State) Lock()    { s.mu.Lock() }
