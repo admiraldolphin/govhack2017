@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: e971c3a2c35f1fb41ba1f38be69e2d86
+timeCreated: 1501321418
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Gentium
+  fontNames:
+  - Gentium
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c354da5f40c8edd4a9d08f547a62d17b, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
