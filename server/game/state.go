@@ -2,6 +2,7 @@ package game
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"sync"
 )
@@ -42,6 +43,21 @@ func (s *State) AddPlayer() (id int) {
 	s.Unlock()
 	s.Notify()
 	return
+}
+
+// RemovePlayer quits a player.
+func (s *State) RemovePlayer(id int) error {
+	s.RLock()
+	if lim := len(s.Players); id < 0 || id >= len(s.Players) {
+		s.RUnlock()
+		return fmt.Errorf("id out of range [%d, %d)", 0, lim)
+	}
+	s.RUnlock()
+	s.Lock()
+	copy(s.Players[id:], s.Players[id+1:])
+	s.Players = s.Players[:len(s.Players)-1]
+	s.Unlock()
+	return nil
 }
 
 // Changed returns a channel closed when the state has changed.
