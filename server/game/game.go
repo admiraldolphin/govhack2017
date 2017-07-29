@@ -9,6 +9,11 @@ func (s *State) Handle(a *Action) error {
 	s.Lock()
 	defer s.Unlock()
 
+	if a.Act == ActNoOp {
+		s.notify()
+		return nil
+	}
+
 	switch s.State {
 	case StateLobby:
 		switch a.Act {

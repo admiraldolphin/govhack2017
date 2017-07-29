@@ -89,6 +89,18 @@ func TestGame(t *testing.T) {
 			},
 		},
 		{
+			// Player 1 does a no-op
+			send:   send1,
+			recv:   recv1,
+			action: &game.Action{Act: game.ActNoOp},
+			want: &game.State{
+				State: game.StateInGame,
+				Players: []game.Player{
+					{}, {},
+				},
+			},
+		},
+		{
 			// Player 2 discards a card
 			send:   send2,
 			recv:   recv2,
