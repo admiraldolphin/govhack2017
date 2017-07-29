@@ -11,6 +11,8 @@ import (
 
 type server struct {
 	state *game.State
+
+	net.Listener
 }
 
 func (s *server) listenAndServe(addr string) error {
@@ -19,6 +21,7 @@ func (s *server) listenAndServe(addr string) error {
 	if err != nil {
 		return err
 	}
+	s.Listener = gl
 	go func() {
 		for {
 			conn, err := gl.Accept()
