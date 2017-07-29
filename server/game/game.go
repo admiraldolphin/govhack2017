@@ -38,19 +38,51 @@ func (s *State) Handle(a *Action, playerID int) error {
 			return fmt.Errorf("bad action for StateLobby [%d]", a.Act)
 		}
 	case StateInGame:
+		p := s.Players[playerID]
 		switch a.Act {
 		case ActPlayCard:
 			if playerID != s.WhoseTurn {
 				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
 			}
 			// TODO: check the card is valid play
+			if lim := len(p.Hand.Actions); a.Card < 0 || a.Card >= lim {
+				return fmt.Errorf("card %d out of bounds [0, %d)", a.Card, lim)
+			}
+			cs := p.Hand.Actions[a.Card]
+
 			// TODO: compute effects
+
+			cs.Played = true
+			p.Played = append(p.Played, cs)
+			nc := s.deck.DrawActions(1)
+			if len(nc) == 0 {
+				// Cover up the gap.
+				copy(p.Hand.Actions[a.Card:], p.Hand.Actions[a.Card+1:])
+				p.Hand.Actions = p.Hand.Actions[:len(p.Hand.Actions)-1]
+			} else {
+				p.Hand.Actions[a.Card] = nc[0]
+			}
+
 		case ActDiscard:
 			if playerID != s.WhoseTurn {
 				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
 			}
 			// TODO: check the card is valid discard
-			// TODO: compute effects / draw new card
+			if lim := len(p.Hand.Actions); a.Card < 0 || a.Card >= lim {
+				return fmt.Errorf("card %d out of bounds [0, %d)", a.Card, lim)
+			}
+			cs := p.Hand.Actions[a.Card]
+			cs.Discarded = true
+			p.Discarded = append(p.Discarded, cs)
+
+			nc := s.deck.DrawActions(1)
+			if len(nc) == 0 {
+				// Cover up the gap.
+				copy(p.Hand.Actions[a.Card:], p.Hand.Actions[a.Card+1:])
+				p.Hand.Actions = p.Hand.Actions[:len(p.Hand.Actions)-1]
+			} else {
+				p.Hand.Actions[a.Card] = nc[0]
+			}
 		default:
 			return fmt.Errorf("bad action for StateInGame [%d]", a.Act)
 		}
