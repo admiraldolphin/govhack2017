@@ -1,6 +1,7 @@
 package game
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"sync"
@@ -56,6 +57,13 @@ func (s *State) Dump(w io.Writer) error {
 	s.RLock()
 	defer s.RUnlock()
 	return enc.Encode(s)
+}
+
+// String - for debugging.
+func (s *State) String() string {
+	b := new(bytes.Buffer)
+	s.Dump(b)
+	return b.String()
 }
 
 // MUST GUARD WITH LOCK
