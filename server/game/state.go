@@ -70,6 +70,12 @@ func (s *State) RemovePlayer(id int) error {
 	case 0:
 		// If there are no players remaining, go back to lobby.
 		s.State = StateLobby
+
+	default:
+		// Go to the next player
+		if s.WhoseTurn == id {
+			s.advance()
+		}
 	}
 	s.notify()
 	return nil
