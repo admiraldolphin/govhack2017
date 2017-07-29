@@ -26,6 +26,9 @@ func (s *State) Handle(a *Action, playerID int) error {
 				return fmt.Errorf("too few players for game [%d<2]", len(s.Players))
 			}
 			s.State = StateInGame
+			s.Clock = 0
+			s.WhoseTurn = -1
+			s.advance()
 			// TODO: shuffle deck, deal cards
 		default:
 			return fmt.Errorf("bad action for StateLobby [%d]", a.Act)
@@ -34,14 +37,12 @@ func (s *State) Handle(a *Action, playerID int) error {
 		switch a.Act {
 		case ActPlayCard:
 			if playerID != s.WhoseTurn {
-				// Not their turn
 				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
 			}
 			// TODO: check the card is valid play
 			// TODO: compute effects
 		case ActDiscard:
 			if playerID != s.WhoseTurn {
-				// Not their turn
 				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
 			}
 			// TODO: check the card is valid discard
