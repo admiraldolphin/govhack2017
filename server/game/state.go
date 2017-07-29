@@ -75,15 +75,3 @@ type Player struct {
 	Hand  *Hand  `json:"hand"`
 	Score int    `json:"score"`
 }
-
-// PersonCard models a game card.
-type PersonCard struct {
-	Name string `json:"name"`
-	// TODO
-}
-
-// ActionCard models a game card.
-type ActionCard struct {
-	Name string `json:"name"`
-	// TODO
-}
