@@ -77,6 +77,7 @@ func (s *State) RemovePlayer(id int) error {
 
 func (s *State) nextPlayer(after int) int {
 	min, sup := (1<<31)-1, (1<<31)-1
+	// It's gotta be linear in Players to find the next one when wrapping around.
 	for id := range s.Players {
 		if id < min {
 			min = id

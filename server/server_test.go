@@ -74,6 +74,8 @@ func TestGame(t *testing.T) {
 				Players: map[int]*game.Player{
 					0: {}, 1: {},
 				},
+				WhoseTurn: 0,
+				Clock:     0,
 			},
 		},
 		{
@@ -86,6 +88,8 @@ func TestGame(t *testing.T) {
 				Players: map[int]*game.Player{
 					0: {}, 1: {},
 				},
+				WhoseTurn: 1,
+				Clock:     0,
 			},
 		},
 		{
@@ -98,6 +102,8 @@ func TestGame(t *testing.T) {
 				Players: map[int]*game.Player{
 					0: {}, 1: {},
 				},
+				WhoseTurn: 1,
+				Clock:     0,
 			},
 		},
 		{
@@ -110,6 +116,8 @@ func TestGame(t *testing.T) {
 				Players: map[int]*game.Player{
 					0: {}, 1: {},
 				},
+				WhoseTurn: 0,
+				Clock:     1,
 			},
 		},
 	}
@@ -130,6 +138,12 @@ func TestGame(t *testing.T) {
 		}
 		if got, want := r.State.Players, p.want.Players; !reflect.DeepEqual(got, want) {
 			t.Errorf("After message %d [%v]: state.Players = %v, want %v", i, p.action, got, want)
+		}
+		if got, want := r.State.WhoseTurn, p.want.WhoseTurn; got != want {
+			t.Errorf("After message %d [%v]: state.WhoseTurn = %v, want %v", i, p.action, got, want)
+		}
+		if got, want := r.State.Clock, p.want.Clock; got != want {
+			t.Errorf("After message %d [%v]: state.Clock = %v, want %v", i, p.action, got, want)
 		}
 	}
 }
