@@ -73,12 +73,14 @@ func TestGame(t *testing.T) {
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
 					0: {
+						Name: "Player 0",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
 						},
 					},
 					1: {
+						Name: "Player 1",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
@@ -98,12 +100,14 @@ func TestGame(t *testing.T) {
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
 					0: {
+						Name: "Player 0",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
 						},
 					},
 					1: {
+						Name: "Player 1",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
@@ -123,12 +127,14 @@ func TestGame(t *testing.T) {
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
 					0: {
+						Name: "Player 0",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
 						},
 					},
 					1: {
+						Name: "Player 1",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
@@ -148,12 +154,14 @@ func TestGame(t *testing.T) {
 				State: game.StateInGame,
 				Players: map[int]*game.Player{
 					0: {
+						Name: "Player 0",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),
 						},
 					},
 					1: {
+						Name: "Player 1",
 						Hand: game.Hand{
 							Actions: make([]game.ActionCard, game.ActionHandSize),
 							People:  make([]game.PersonCard, game.PeopleHandSize),

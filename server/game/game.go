@@ -89,7 +89,9 @@ func (s *State) AddPlayer() (int, error) {
 		return -1, fmt.Errorf("game not in lobby state [%d!=%d]", s.State, StateLobby)
 	}
 	id := s.nextID
-	s.Players[id] = &Player{}
+	s.Players[id] = &Player{
+		Name: fmt.Sprintf("Player %d", id),
+	}
 	s.nextID++
 	s.notify()
 	return id, nil
