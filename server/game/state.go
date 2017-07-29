@@ -12,7 +12,12 @@ const (
 type State struct {
 	State   int      `json:"state"`
 	Players []Player `json:"players"`
+
+	changedNote chan struct{}
 }
+
+// Changed returns a channel closed when the state has changed.
+func (s *State) Changed() <-chan struct{} { return s.changedNote }
 
 // Player is the state relative to a particular player.
 type Player struct {
