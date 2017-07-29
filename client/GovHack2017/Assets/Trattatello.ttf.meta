@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: d14b4b2967c626a4086f3a29927e8024
+timeCreated: 1501291296
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Trattatello
+  fontNames:
+  - Trattatello
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
