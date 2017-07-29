@@ -31,7 +31,7 @@ class App extends Component {
     // testing to see if we can hit dataset, this will change once we hit json from server
     fetch('http://data.gov.au/dataset/5b5ced0f-0032-4178-a874-57b92d7b09d9/resource/980aa7af-45ce-49a8-a813-013d20c52011/download/inquests.json')
       .then((response) => response.json())
-      .then((response) => Object.keys(response).map(function (key) { return response[key]; }) )
+      .then((response) => Object.keys(response).map(key => response[key]))
       .then(response => {
           this.setState({data: response[0]})
         }
