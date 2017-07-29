@@ -1,6 +1,7 @@
 package game
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"sync"
@@ -58,6 +59,13 @@ func (s *State) Dump(w io.Writer) error {
 	return enc.Encode(s)
 }
 
+// String - for debugging.
+func (s *State) String() string {
+	b := new(bytes.Buffer)
+	s.Dump(b)
+	return b.String()
+}
+
 // MUST GUARD WITH LOCK
 func (s *State) notify() {
 	close(s.changedNote)
@@ -71,19 +79,9 @@ func (s *State) RUnlock() { s.mu.RUnlock() }
 
 // Player is the state relative to a particular player.
 type Player struct {
-	Name  string `json:"name"`
-	Hand  *Hand  `json:"hand"`
-	Score int    `json:"score"`
-}
-
-// PersonCard models a game card.
-type PersonCard struct {
-	Name string `json:"name"`
-	// TODO
-}
-
-// ActionCard models a game card.
-type ActionCard struct {
-	Name string `json:"name"`
-	// TODO
+	Name      string             `json:"name"`
+	Hand      *HandState         `json:"hand"`
+	Played    []*ActionCardState `json:"played"`
+	Discarded []*ActionCardState `json:"discarded"`
+	Score     int                `json:"score"`
 }

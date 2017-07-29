@@ -22,15 +22,21 @@ type Hand struct {
 	Actions []*ActionCard `json:"actions"`
 }
 
-// Deck is what a deck can do .
+// HandState is like a hand, but tracks state of cards.
+type HandState struct {
+	People  []*PersonCardState `json:"people"`
+	Actions []*ActionCardState `json:"actions"`
+}
+
+// Deck is what a deck can do.
 type Deck interface {
 	Instance() Deck
 	Shuffle()
-	DrawPeople(int) []*PersonCard
-	DrawActions(int) []*ActionCard
+	DrawPeople(int) []*PersonCardState
+	DrawActions(int) []*ActionCardState
 }
 
-// Instance makes a shallow copy of the deck, so that dealing cards
+// Instance makes a copy of the deck, so that dealing cards
 // (destructive to slices) can be repeated.
 func (h *Hand) Instance() Deck {
 	h2 := *h
@@ -50,21 +56,33 @@ func (h *Hand) Shuffle() {
 // DrawPeople removes the top card from the person deck and returns it,
 // unless there are not enough, in which case it returns only the
 // remaining card or nil.
-func (h *Hand) DrawPeople(n int) (c []*PersonCard) {
+func (h *Hand) DrawPeople(n int) (s []*PersonCardState) {
+	var cs []*PersonCard
+	defer func() {
+		for _, c := range cs {
+			s = append(s, c.New())
+		}
+	}()
 	if len(h.People) <= n {
-		c, h.People = h.People, nil
-		return nil
+		cs, h.People = h.People, nil
+		return
 	}
-	c, h.People = h.People[:n], h.People[n:]
+	cs, h.People = h.People[:n], h.People[n:]
 	return
 }
 
 // DrawActions does the same thing as DrawPerson but for action cards.
-func (h *Hand) DrawActions(n int) (c []*ActionCard) {
+func (h *Hand) DrawActions(n int) (s []*ActionCardState) {
+	var cs []*ActionCard
+	defer func() {
+		for _, c := range cs {
+			s = append(s, c.New())
+		}
+	}()
 	if len(h.People) <= n {
-		c, h.Actions = h.Actions, nil
-		return nil
+		cs, h.Actions = h.Actions, nil
+		return
 	}
-	c, h.Actions = h.Actions[:n], h.Actions[n:]
+	cs, h.Actions = h.Actions[:n], h.Actions[n:]
 	return
 }

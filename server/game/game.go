@@ -39,18 +39,12 @@ func (s *State) Handle(a *Action, playerID int) error {
 		}
 	case StateInGame:
 		switch a.Act {
-		case ActPlayCard:
+		case ActPlayCard, ActDiscard:
 			if playerID != s.WhoseTurn {
 				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
 			}
-			// TODO: check the card is valid play
-			// TODO: compute effects
-		case ActDiscard:
-			if playerID != s.WhoseTurn {
-				return fmt.Errorf("not your turn [%d!=%d]", playerID, s.WhoseTurn)
-			}
-			// TODO: check the card is valid discard
-			// TODO: compute effects / draw new card
+			s.playOrDiscard(s.Players[playerID], a)
+
 		default:
 			return fmt.Errorf("bad action for StateInGame [%d]", a.Act)
 		}
@@ -66,6 +60,61 @@ func (s *State) Handle(a *Action, playerID int) error {
 		}
 	}
 	return nil
+}
+
+// MUST GUARD WITH LOCK
+func (s *State) playOrDiscard(p *Player, a *Action) error {
+	if lim := len(p.Hand.Actions); a.Card < 0 || a.Card >= lim {
+		return fmt.Errorf("card %d out of bounds [0, %d)", a.Card, lim)
+	}
+	cs := p.Hand.Actions[a.Card]
+
+	switch a.Act {
+	case ActPlayCard:
+		cs.Played = true
+		p.Played = append(p.Played, cs)
+
+		s.tallyEffects(cs.Card)
+	case ActDiscard:
+		cs.Discarded = true
+		p.Discarded = append(p.Discarded, cs)
+	}
+
+	nc := s.deck.DrawActions(1)
+	if len(nc) == 0 {
+		// Cover up the gap.
+		copy(p.Hand.Actions[a.Card:], p.Hand.Actions[a.Card+1:])
+		p.Hand.Actions = p.Hand.Actions[:len(p.Hand.Actions)-1]
+	} else {
+		// Replace card.
+		p.Hand.Actions[a.Card] = nc[0]
+	}
+	return nil
+}
+
+// MUST GUARD WITH LOCK
+func (s *State) tallyEffects(ac *ActionCard) {
+	for _, p := range s.Players {
+		for _, pc := range p.Hand.People {
+			for ti, t := range pc.Card.Traits {
+				if ac.Trait.Key != t.Key {
+					continue
+				}
+				if pc.Dead {
+					// Rule: Once dead, people don't accumulate points
+					continue
+				}
+				// Record effects
+				pc.CompletedTraits = append(pc.CompletedTraits, ti)
+				pc.Score++ // Score attributed to this card
+				pc.Dead = ac.Trait.Death
+				if pc.Dead {
+					// The person was just killed; add points to player.
+					p.Score += pc.Score
+				}
+			}
+		}
+	}
 }
 
 // advance advances whose-turn to the next player, and game clock
@@ -154,7 +203,7 @@ func (s *State) startGame() {
 	s.deck = s.baseDeck.Instance()
 	s.deck.Shuffle()
 	for _, p := range s.Players {
-		p.Hand = &Hand{
+		p.Hand = &HandState{
 			Actions: s.deck.DrawActions(ActionHandSize),
 			People:  s.deck.DrawPeople(PeopleHandSize),
 		}
