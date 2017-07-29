@@ -12,8 +12,7 @@ type Statum int
 
 // Broad states (statums).
 const (
-	StateNoGame Statum = iota
-	StateLobby
+	StateLobby Statum = iota
 	StateInGame
 	StateGameOver
 )
@@ -36,13 +35,16 @@ func New() *State {
 }
 
 // AddPlayer adds a player.
-func (s *State) AddPlayer() (id int) {
+func (s *State) AddPlayer() (int, error) {
 	s.Lock()
-	id = len(s.Players)
+	defer s.Unlock()
+	if s.State != StateLobby {
+		return -1, fmt.Errorf("game not in lobby state [%d!=%d]", s.State, StateLobby)
+	}
+	id := len(s.Players)
 	s.Players = append(s.Players, Player{})
-	s.Unlock()
-	s.Notify()
-	return
+	s.notify()
+	return id, nil
 }
 
 // RemovePlayer quits a player.
@@ -54,6 +56,7 @@ func (s *State) RemovePlayer(id int) error {
 	}
 	copy(s.Players[id:], s.Players[id+1:])
 	s.Players = s.Players[:len(s.Players)-1]
+	s.notify()
 	return nil
 }
 
@@ -66,17 +69,17 @@ func (s *State) Changed() <-chan struct{} {
 
 // Dump writes the state to a writer in JSON.
 func (s *State) Dump(w io.Writer) error {
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "\t")
 	s.RLock()
 	defer s.RUnlock()
-	return json.NewEncoder(w).Encode(s)
+	return enc.Encode(s)
 }
 
-// Notify notifies all listeners (on the channel return from Changed) that the state has changed.
-func (s *State) Notify() {
-	s.Lock()
+// MUST GUARD WITH LOCK
+func (s *State) notify() {
 	close(s.changedNote)
 	s.changedNote = make(chan struct{})
-	s.Unlock()
 }
 
 func (s *State) Lock()    { s.mu.Lock() }

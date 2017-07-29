@@ -38,11 +38,14 @@ func (s *server) listenAndServe(addr string) error {
 }
 
 func (s *server) handleConnection(ctx context.Context, conn net.Conn) {
-	cctx, canc := context.WithCancel(ctx)
-
 	// Assign the player a number.
-	id := s.state.AddPlayer()
+	id, err := s.state.AddPlayer()
+	if err != nil {
+		log.Printf("Can't add player: %v", err)
+		conn.Close()
+	}
 
+	cctx, canc := context.WithCancel(ctx)
 	go func() {
 		if err := s.handleInbound(cctx, conn, id); err != nil {
 			log.Printf("Handling inbound stream: %v", err)
