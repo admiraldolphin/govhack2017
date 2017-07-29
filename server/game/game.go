@@ -128,7 +128,8 @@ func (s *State) RemovePlayer(id int) error {
 
 // MUST GUARD WITH LOCK
 func (s *State) nextPlayer(after int) int {
-	min, sup := (1<<31)-1, (1<<31)-1
+	const bigint = (1 << 31) - 1
+	min, sup := bigint, bigint
 	// It's gotta be linear in Players to find the next one when wrapping around.
 	for id := range s.Players {
 		if id < min {
@@ -138,7 +139,7 @@ func (s *State) nextPlayer(after int) int {
 			sup = id
 		}
 	}
-	if sup == (1<<31)-1 {
+	if sup == bigint {
 		return min
 	}
 	return sup
