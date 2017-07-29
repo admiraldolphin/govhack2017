@@ -1,0 +1,30 @@
+{
+	name: "Adams, William", // Mandatory
+	inquest: { death_date: "23 Jan 1900", death_verdict: "Natural causes",
+		year: "1900", permalink "https://..."}, // Mandatory
+		
+	birth: { birth_date: "25 Nov 1870", birth_place: "Launceston",
+		birth_mother: "Windus, Louisa Mary", birth_father: "Weavell, Henry",
+		year: "1870", permalink "https://..."}, // Optional
+		
+	immigration: { immigration_date: "9-Dec-24", from_country: "England",
+		year: "1924", permalink "https://..."}, // Optional
+		
+	convict: { departure_date: "23 Mar 1844", convict_port: "Portsmouth",
+		convict_ship: "London (1)", year: "1844", permalink "https://..."}, // Optional
+	
+	bankruptcy: { bankrupt_date: "04 Apr 1829", year: "1829",
+		permalink "https://..."}, // Optional
+	marriage: { marriage_date: "01 Jul 1804",
+		spouse_name: "Cummings, Elizabeth", marriage_place: "Hobart",
+		year: "1804", permalink "https://..." }, // Optional
+	court: { trial_date: "10 Oct 1835", trial_offence: "Sheep stealing",
+		year: "1835", permalink "https://..."}, // Optional
+	health-welfare: { admission_date: "Dec 1830",
+		porperty: "New Norfolk Colonial Hospital",
+		remarks: "Admitted with syphilis", year: "1830",
+		permalink "https://..."}, // Optional
+	census: { census_year: "1843", census_place: "Hobart",
+		census_children: "Yes", year: "1843", permalink "https://..."} // Optional
+	
+}
