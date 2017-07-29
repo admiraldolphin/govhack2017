@@ -86,7 +86,7 @@ func (s *server) handleInbound(ctx context.Context, conn net.Conn, playerID int)
 			return err
 		}
 		if err := json.Unmarshal(msg, m); err != nil {
-			return err
+			log.Printf("Couldn't unmarshal incoming JSON but continuing: %v", err)
 		}
 		if err := s.state.Handle(m, playerID); err != nil {
 			log.Printf("Couldn't handle action but continuing: %v", err)
