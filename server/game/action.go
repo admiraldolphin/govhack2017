@@ -5,13 +5,14 @@ type Act int
 
 // The acts.
 const (
-	ActPlay Act = iota
+	ActJoinGame Act = iota
+	ActPlayCard
 	ActDiscard
 )
 
 // Action is all info needed from the frontend to act.
 type Action struct {
-	Player int `json:"player"`
 	Act    Act `json:"act"`
+	Player int `json:"player"`
 	Card   int `json:"card"`
 }

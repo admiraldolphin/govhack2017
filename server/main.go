@@ -19,7 +19,7 @@ func main() {
 
 	// Set up HTTP handlers
 	http.HandleFunc("/helloz", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello, world!\n")
+		fmt.Fprint(w, "Hello, GovHack 2017!\n")
 	})
 	http.HandleFunc("/statusz", func(w http.ResponseWriter, r *http.Request) {
 		s.state.Dump(w)
