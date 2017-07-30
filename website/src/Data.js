@@ -4,6 +4,8 @@ import './App.css';
 class Data extends Component {
   render() {
     return (
+      <div className="main">
+
       <div className="data">
         <h1>
           You killed {this.props.data.name}!
@@ -30,7 +32,7 @@ class Data extends Component {
         }
         {this.props.data.marriage.marriage_date &&
         <p>
-          They married on {this.props.data.marriage.marriage_date} in {this.props.data.marriage.marriage_place} to {this.props.data.marriage.spouse_name} [<a href={this.props.data.marriage.permalink}>Ref</a>]
+          They married on {this.props.data.marriage.marriage_date} to {this.props.data.marriage.spouse_name} [<a href={this.props.data.marriage.permalink}>Ref</a>]
         </p>
         }
         {this.props.data.court.trial_offence &&
@@ -45,10 +47,11 @@ class Data extends Component {
         }
         {this.props.data.inquest.death_verdict &&
         <p>
-          They died from {this.props.data.inquest.death_verdict} on {this.props.data.inquest.death_date} [<a href={this.props.data.inquest.permalink}>Ref</a>]
+          {this.props.data.inquest.death_verdict} on {this.props.data.inquest.death_date} [<a href={this.props.data.inquest.permalink}>Ref</a>]
         </p>
         }
 
+      </div>
       </div>
     );
   }

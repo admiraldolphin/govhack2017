@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
+import InlineSVG from "react-inlinesvg";
 
 class Navbar extends Component {
   render() {
+    let deathtype = 'misc';
+    let deathimage = require('./images/dc/misc.svg');
+
+	  let divStyle = {
+		  backgroundImage: 'url(images/dc/misc.svg)'
+	  };
+
     return (
       <div className="nav">
         <ul>
@@ -10,8 +18,14 @@ class Navbar extends Component {
           (item, key) =>
             <li
               onClick={() => this.props.changeTab(key)}
-              key={key}>
-                <span>{item.card.source.name}</span>
+              key={key}
+              className={this.props.isCurrent(key) ? 'current' : ''}
+              style = {{
+	              transform: 'rotate(' + (Math.random() * 8 - 4) + 'deg)'
+              }}
+            >
+                <span>{item.NAME}</span>
+								<InlineSVG src={ deathimage } />
             </li>
         )}
         </ul>

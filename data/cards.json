@@ -10,7 +10,7 @@
 		"dc_misc", "dc_poison", "dc_scalding", "dc_shipwreck", "dc_shock",
 		"dc_snakebite", "dc_stabbing", "dc_starvation", "dc_stomach",
 		"dc_train", "dc_tree", "dc_unexplained", "dc_visitation", "dc_wagon",
-		"dc_wheel", "dc_suicide"],
+		"dc_wheel", "dc_suicide", "dc_childbirth", "dc_misadventure"],
 		
 	"life_event": ["le_bankruptcy", "le_birth", "le_census", "le_convict",
 		"le_court", "le_health_welfare", "le_immigration", "le_marriage"],
