@@ -421,7 +421,7 @@
       "year" : "1880",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "26 Nov 1880",
@@ -4755,7 +4755,7 @@
       "death_verdict" : "Natural causes, to wit, rupture of a blood vessel on the brain",
       "death_causes" : [
         "dc_heart",
-        "dc_blood",
+        "dc_heart",
         "dc_misc",
         "dc_brain"
       ],
@@ -5695,7 +5695,7 @@
       "year" : "1908",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "24 Aug 1908",
@@ -5853,7 +5853,7 @@
       "death_verdict" : "Died from rupture of the blood vessels in the lungs",
       "death_causes" : [
         "dc_heart",
-        "dc_blood",
+        "dc_heart",
         "dc_lungs"
       ],
       "death_date" : "14 Apr 1891",
@@ -7858,7 +7858,7 @@
       "death_causes" : [
         "dc_tree",
         "dc_falling",
-        "dc_blood",
+        "dc_heart",
         "dc_misc",
         "dc_stomach"
       ],
@@ -8700,7 +8700,7 @@
       "year" : "1886",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "12 Jul 1886",
@@ -14013,7 +14013,7 @@
       "year" : "1891",
       "death_verdict" : "Inflammation of the bowel, accelerated by want of medical assistance",
       "death_causes" : [
-        "dc_medic",
+        "dc_medicine",
         "dc_stomach"
       ],
       "death_date" : "21 Nov 1891",
@@ -14256,7 +14256,7 @@
       "death_verdict" : "Died from rupture of a blood vessel",
       "death_causes" : [
         "dc_heart",
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "23 Mar 1903",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1354788\/one"
@@ -14809,7 +14809,7 @@
       "death_verdict" : "Ruptured artery on brain caused by fall",
       "death_causes" : [
         "dc_falling",
-        "dc_blood",
+        "dc_heart",
         "dc_brain"
       ],
       "death_date" : "25 May 1912",
@@ -15507,7 +15507,7 @@
       "year" : "1890",
       "death_verdict" : "Accidentally killed by falling from a carriage, the wheels of which crushed his head",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_falling",
         "dc_wheel",
         "dc_brain",
@@ -16464,7 +16464,7 @@
         "dc_falling",
         "dc_heart",
         "dc_brain",
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "29 Nov 1906",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1355250\/one"
@@ -17691,7 +17691,7 @@
       "year" : "1876",
       "death_verdict" : "Rupture of jugular vein",
       "death_causes" : [
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "4 Jul 1876",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1359504\/one"
@@ -22184,7 +22184,7 @@
       "year" : "1879",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "22 Apr 1879",
@@ -22763,7 +22763,7 @@
       "year" : "1888",
       "death_verdict" : "Rupture of an aneurism of the aorta",
       "death_causes" : [
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "12 Jun 1888",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1358147\/one"
@@ -29188,7 +29188,7 @@
       "year" : "1882",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "7 Apr 1882",
@@ -32571,7 +32571,7 @@
       "year" : "1898",
       "death_verdict" : "Died from rupture of the spleen",
       "death_causes" : [
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "8 Jan 1898",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1354174\/one"
@@ -32757,7 +32757,7 @@
       "year" : "1884",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "1 Jul 1884",
@@ -33483,7 +33483,7 @@
       "year" : "1886",
       "death_verdict" : "Accidentally crushed to death in a lithographic machine",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_misc"
       ],
       "death_date" : "23 Jun 1886",
@@ -34347,7 +34347,7 @@
       "year" : "1882",
       "death_verdict" : "Accidentally crushed to death",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_misc"
       ],
       "death_date" : "27 Jun 1882",
@@ -34724,7 +34724,7 @@
       "year" : "1881",
       "death_verdict" : "Ruptured heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "30 Sep 1881",
@@ -35029,7 +35029,7 @@
       "year" : "1875",
       "death_verdict" : "Accidental rupture of an artery on the lungs",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_lungs",
         "dc_misc"
       ],
@@ -36853,7 +36853,7 @@
       "year" : "1888",
       "death_verdict" : "Heart rupture",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "8 Mar 1888",
@@ -41314,7 +41314,7 @@
       "year" : "1872",
       "death_verdict" : "Small intestines rupture",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_stomach"
       ],
       "death_date" : "6 Sep 1872",
@@ -44653,7 +44653,7 @@
       "year" : "1872",
       "death_verdict" : "Stomach rupture",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_stomach"
       ],
       "death_date" : "30 Aug 1872",
@@ -45565,7 +45565,7 @@
       "year" : "1887",
       "death_verdict" : "Accidentally crushed to death by the wheels of a waggon",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_wagon",
         "dc_wheel",
         "dc_misc"
@@ -45615,7 +45615,7 @@
       "year" : "1889",
       "death_verdict" : "Accidentally crushed by a cart at the Rocky Hills",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_misc"
       ],
       "death_date" : "26 Dec 1889",
@@ -48580,7 +48580,7 @@
       "year" : "1881",
       "death_verdict" : "Rupture of the heart",
       "death_causes" : [
-        "dc_blood",
+        "dc_heart",
         "dc_heart"
       ],
       "death_date" : "4 Mar 1881",
@@ -51740,7 +51740,7 @@
       "year" : "1892",
       "death_verdict" : "Died from rupture of the aorta",
       "death_causes" : [
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "25 Feb 1892",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1358040\/one"
@@ -52296,7 +52296,7 @@
       "year" : "1870",
       "death_verdict" : "Accidentally crushed",
       "death_causes" : [
-        "dc_crush",
+        "dc_crushing",
         "dc_misc"
       ],
       "death_date" : "27 Mar 1870",
@@ -53178,7 +53178,7 @@
       "year" : "1894",
       "death_verdict" : "Died from rupture of the bladder, incurred during a scuffle",
       "death_causes" : [
-        "dc_blood"
+        "dc_heart"
       ],
       "death_date" : "24 Apr 1894",
       "permalink" : "https:\/\/linctas.ent.sirsidynix.net.au\/client\/en_AU\/all\/search\/detailnonmodal\/ent:$002f$002fNAME_INDEXES$002f0$002fNAME_INDEXES:1353713\/one"
