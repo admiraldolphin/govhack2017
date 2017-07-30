@@ -149,7 +149,13 @@ func (s *State) AddPlayer() (int, error) {
 	}
 	id := s.nextID
 	s.Players[id] = &Player{
-		Name: fmt.Sprintf("Player %d", id+1),
+		Name:      fmt.Sprintf("Player %d", id+1),
+		Discarded: []*ActionCardState{},
+		Played:    []*ActionCardState{},
+		Hand: &HandState{
+			Actions: []*ActionCardState{},
+			People:  []*PersonCardState{},
+		},
 	}
 	s.nextID++
 	s.notify()
