@@ -15,6 +15,6 @@
 	"life_event": ["le_bankruptcy", "le_birth", "le_census", "le_convict",
 		"le_court", "le_health_welfare", "le_immigration", "le_marriage"],
 		
-	"decade": ["1820", "1830", "1840", "1850", "1860", "1870", "1890", "1900",
-		"1910", "1920", "1930"]
+	"decade": ["1810", "1820", "1830", "1840", "1850", "1860", "1870", "1880",
+		"1890", "1900", "1910", "1920", "1930"]
 }

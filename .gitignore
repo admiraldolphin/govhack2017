@@ -116,5 +116,6 @@ xcuserdata/
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
+Package.pins
 
 # End of https://www.gitignore.io/api/osx,unity,windows,xcode
