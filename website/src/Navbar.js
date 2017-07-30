@@ -20,7 +20,7 @@ class Navbar extends Component {
 	              transform: 'rotate(' + (Math.random() * 8 - 4) + 'deg)'
               }}
             >
-                <span>{item.NAME}</span>
+                <span>{item.card.source.name}</span>
 								<InlineSVG src={ deathimage } />
             </li>
         )}
