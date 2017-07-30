@@ -7,10 +7,6 @@ class Navbar extends Component {
     let deathtype = 'misc';
     let deathimage = require('./images/dc/misc.svg');
 
-	  let divStyle = {
-		  backgroundImage: 'url(images/dc/misc.svg)'
-	  };
-
     return (
       <div className="nav">
         <ul>

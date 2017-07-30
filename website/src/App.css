@@ -67,9 +67,9 @@
   flex-flow: column;
   justify-content: space-around; }
   .nav li:hover {
-    transition: background 0.5s; }
+    transition: background 0.1s; }
   .nav li.current, .nav li:hover {
-    background-color: #666;
+    background: linear-gradient(to bottom, #4c4c4c 10%, #323232);
     box-shadow: -1px -1px #333, -2px -2px #333, -3px -3px #333, -4px -4px #333, -6px -6px #333, -7px -7px #333; }
 .nav span {
   display: block; }

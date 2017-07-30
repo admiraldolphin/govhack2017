@@ -95,12 +95,12 @@ $maroon:  #ad1c1c;
     justify-content: space-around;
 
     &:hover {
-      transition: background 0.5s;
+      transition: background 0.1s;
     }
 
     &.current, &:hover {
       //border: 1px solid $maroon;
-      background-color: #666;
+      background: linear-gradient(to bottom, #4c4c4c 10%, #323232);
       box-shadow: -1px -1px #333,
       -2px -2px #333,
       -3px -3px #333,
