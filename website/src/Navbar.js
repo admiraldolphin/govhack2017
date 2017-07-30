@@ -11,7 +11,7 @@ class Navbar extends Component {
             <li
               onClick={() => this.props.changeTab(key)}
               key={key}>
-                <span>{item.NAME}</span>
+                <span>{item.card.source.name}</span>
             </li>
         )}
         </ul>
