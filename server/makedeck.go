@@ -6,6 +6,10 @@ import (
 	"log"
 )
 
+var (
+	prettyDeath = map[string]string{}
+)
+
 // CreateDeck churns a bunch of people into a card deck.
 func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Precompute different possible traits
@@ -41,7 +45,8 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	var pcs []*game.PersonCard
 	for _, p := range ppl {
 		pc := &game.PersonCard{
-			Name: p.Name,
+			Name:   p.Name,
+			Source: p,
 		}
 		pcs = append(pcs, pc)
 
