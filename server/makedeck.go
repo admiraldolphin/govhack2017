@@ -1,14 +1,23 @@
 package main
 
 import (
+	"log"
+	"strings"
+
 	"github.com/admiraldolphin/govhack2017/server/game"
 	"github.com/admiraldolphin/govhack2017/server/load"
-	"log"
 )
 
-var (
-	prettyDeath = map[string]string{}
-)
+var prettyLifeEvents = map[string]string{
+	"le_bankruptcy":     "Bankrupt",
+	"le_birth":          "Born",
+	"le_census":         "Census",
+	"le_convict":        "Convicted",
+	"le_court":          "Court",
+	"le_health_welfare": "Health/Welfare",
+	"le_immigration":    "Immigrated",
+	"le_marriage":       "Married",
+}
 
 // CreateDeck churns a bunch of people into a card deck.
 func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
@@ -17,7 +26,7 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	for _, d := range ct.Death {
 		traits[d] = &game.Trait{
 			Key:   d,
-			Name:  d, // TODO: better name
+			Name:  strings.Title(strings.TrimPrefix(d, "dc_")),
 			Death: true,
 		}
 	}
@@ -26,19 +35,10 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 			key := le + "." + dc
 			traits[key] = &game.Trait{
 				Key:   key,
-				Name:  key, // TODO: better name
+				Name:  prettyLifeEvents[le] + " in " + dc + "s",
 				Death: false,
 			}
 		}
-	}
-
-	// Make cards for traits.
-	acs := make([]*game.ActionCard, 0, len(traits))
-	for _, t := range traits {
-		acs = append(acs, &game.ActionCard{
-			Name:  t.Name,
-			Trait: t,
-		})
 	}
 
 	// Scan people to make cards & accumulate matching traits
@@ -88,6 +88,18 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		if p.Census.Year != "" {
 			addTrait("le_census." + p.Census.Year[:3] + "0")
 		}
+	}
+
+	// Make cards for traits (but only that match someone).
+	acs := make([]*game.ActionCard, 0, len(traits))
+	for _, t := range traits {
+		if t.PeopleMatching < 1 {
+			continue
+		}
+		acs = append(acs, &game.ActionCard{
+			Name:  t.Name,
+			Trait: t,
+		})
 	}
 
 	// Normalise PeopleMatching values
