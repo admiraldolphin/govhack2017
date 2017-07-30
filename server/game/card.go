@@ -14,7 +14,10 @@ type PersonCard struct {
 
 // New returns a fresh state for this card.
 func (c *PersonCard) New() *PersonCardState {
-	return &PersonCardState{Card: c}
+	return &PersonCardState{
+		Card:            c,
+		CompletedTraits: []int{},
+	}
 }
 
 // PersonCardState is state of a person card.
