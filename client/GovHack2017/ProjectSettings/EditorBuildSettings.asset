@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Lobby.unity
     guid: 60c80d61783648043823602de8eaf666
+  - enabled: 1
+    path: Assets/Game.unity
+    guid: 184dd3955d3bb374aa5ce02dc789295c

@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224556064634684380}
   - component: {fileID: 114112010670737072}
+  - component: {fileID: 114260392523627264}
   m_Layer: 5
   m_Name: Person
   m_TagString: Untagged
@@ -63,6 +64,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &114260392523627264
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525286623759416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c93bb5786dce9f94394c5fb5f993bea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aliveSprite: {fileID: 21300000, guid: 7c60a1b44354ddd47847ee2a93d0be6d, type: 3}
+  deadSprite: {fileID: 21300000, guid: 06c6162c809132b458c7fc70d72baab4, type: 3}
 --- !u!114 &114842445135628800
 MonoBehaviour:
   m_ObjectHideFlags: 1
