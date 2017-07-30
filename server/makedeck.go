@@ -6,6 +6,10 @@ import (
 	"log"
 )
 
+var (
+	prettyDeath = map[string]string{}
+)
+
 // CreateDeck churns a bunch of people into a card deck.
 func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Precompute different possible traits
@@ -28,11 +32,21 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		}
 	}
 
-	// Scan people to make cards & find matching traits
+	// Make cards for traits.
+	acs := make([]*game.ActionCard, 0, len(traits))
+	for _, t := range traits {
+		acs = append(acs, &game.ActionCard{
+			Name:  t.Name,
+			Trait: t,
+		})
+	}
+
+	// Scan people to make cards & accumulate matching traits
 	var pcs []*game.PersonCard
 	for _, p := range ppl {
 		pc := &game.PersonCard{
-			Name: p.Name,
+			Name:   p.Name,
+			Source: p,
 		}
 		pcs = append(pcs, pc)
 
@@ -50,23 +64,40 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 			addTrait(d)
 		}
 
-		// "le_birth", Birth
 		if p.Birth.Year != "" {
 			addTrait("le_birth." + p.Birth.Year[:3] + "0")
 		}
-
-		// "le_immigration", Immigration
-		// "le_convict", Convict
-		// "le_bankruptcy", Bankruptcy
-		// "le_marriage", Marriage
-		// "le_court", Court
-		// "le_health_welfare", HealthWelfare
-		// "le_census", Census
+		if p.Immigration.Year != "" {
+			addTrait("le_immigration." + p.Immigration.Year[:3] + "0")
+		}
+		if p.Convict.Year != "" {
+			addTrait("le_convict." + p.Convict.Year[:3] + "0")
+		}
+		if p.Bankruptcy.Year != "" {
+			addTrait("le_bankruptcy." + p.Bankruptcy.Year[:3] + "0")
+		}
+		if p.Marriage.Year != "" {
+			addTrait("le_marriage." + p.Marriage.Year[:3] + "0")
+		}
+		if p.Court.Year != "" {
+			addTrait("le_court." + p.Court.Year[:3] + "0")
+		}
+		if p.HealthWelfare.Year != "" {
+			addTrait("le_health_welfare." + p.HealthWelfare.Year[:3] + "0")
+		}
+		if p.Census.Year != "" {
+			addTrait("le_census." + p.Census.Year[:3] + "0")
+		}
 	}
 
-	// Normalise PeopleMatching
+	// Normalise PeopleMatching values
 	for _, t := range traits {
 		t.PeopleMatching /= float64(len(pcs))
 	}
-	return nil
+
+	log.Printf("Generated %d people cards and %d action cards", len(pcs), len(acs))
+	return &game.Hand{
+		People:  pcs,
+		Actions: acs,
+	}
 }

@@ -29,12 +29,12 @@ func main() {
 	if err != nil {
 		log.Printf("Couldn't load cards.json, continuing: %v", err)
 	}
-	log.Printf("Loaded traits: %#v", cts)
+	log.Print("Loaded traits")
 
 	deck := game.Deck(testDeck)
-	// if cts != nil && ppl != nil {
-	// 	deck = CreateDeck(cts, ppl)
-	// }
+	if cts != nil && ppl != nil {
+		deck = CreateDeck(cts, ppl)
+	}
 
 	s := server{state: game.New(deck)}
 
