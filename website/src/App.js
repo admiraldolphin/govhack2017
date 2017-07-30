@@ -22,6 +22,10 @@ class App extends Component {
     console.log(this.props.match.params.id)
   }
 
+  isCurrentTab(id) {
+    return this.state.focusId === id;
+  }
+
   changeTab(id) {
     console.log(id)
     this.setState({focusId: id})
@@ -47,6 +51,7 @@ class App extends Component {
         <Navbar
           data={this.state.data}
           changeTab={this.changeTab.bind(this)}
+          isCurrent={this.isCurrentTab.bind(this)}
         />
         <Data
           data={this.state.data[this.state.focusId]}
