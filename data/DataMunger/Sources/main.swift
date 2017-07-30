@@ -4,6 +4,139 @@ import Foundation
 let inputFolder = "/Users/McJones/Downloads/"
 let outputFolder = "/Users/McJones/Development/govhack2017/data/"
 
+// basic function matches keywords to death types
+// not perfect but avoids us having to make ~1500 death cards
+func deathTypes(death:String) -> [String]
+{
+    var deaths : Set<String> = []
+    
+    let types = ["DROWN":"dc_drown",
+                 "ACCIDENT":"dc_misc",
+                 "BOWEL":"dc_stomach",
+                 "SUICIDE":"dc_suicide",
+                 "NATURAL":"dc_misc",
+                 "ACID":"dc_acid",
+                 "OLD AGE":"dc_age",
+                 "ALCOHOL":"dc_alcohol",
+                 "BRAIN":"dc_brain",
+                 "BRIDGE":"dc_brain",
+                 "BULL":"dc_bull",
+                 "BULLOCK":"dc_bull",
+                 "BURN":"dc_burning",
+                 "CRUSH":"dc_crush",
+                 "EXPLO":"dc_explosion",
+                 "EXPO":"dc_explosion",
+                 "FALL":"dc_fall",
+                 "GUN":"dc_gunshot",
+                 "SHOT":"dc_gunshot",
+                 "HEART":"dc_heart",
+                 "CARDIAC":"dc_heart",
+                 "HORSE":"dc_horse",
+                 "DISEASE":"dc_illness",
+                 "POISON":"dc_poison",
+                 "SCALD":"dc_scalding",
+                 "LUNG":"dc_lungs",
+                 "INHAL":"dc_inhalation",
+                 "MEDIC":"dc_medic",
+                 "MINE":"dc_mine",
+                 "MINI":"dc_mine",
+                 "SHIP":"dc_shipwreck",
+                 "SHOCK":"dc_shock",
+                 "SNAKE":"dc_snakebite",
+                 "STARV":"dc_starvation",
+                 "STOMACH":"dc_stomach",
+                 "TRAIN":"dc_train",
+                 "RAILWAY":"dc_train",
+                 "TREE":"dc_tree",
+                 "VISIT":"dc_visitation",
+                 "WAGON":"dc_wagon",
+                 "WAGGON":"dc_wagon",
+                 "WHEEL":"dc_wheel",
+                 "MURDER":"dc_stabbing",
+                 "DIARR":"dc_stomach",
+                 "EPILEP":"dc_brain",
+                 "APOPLEXY":"dc_brain",
+                 "SELF":"dc_suicide",
+                 "CHILD":"dc_childbirth",
+                 "DRINK":"dc_alcohol",
+                 "DIP":"dc_illness",
+                 "CONVULS":"dc_brain",
+                 "DRIV":"dc_wheel",
+                 "PNEUMONIA":"dc_lungs",
+                 "BRONCH":"dc_lungs",
+                 "SUFFO":"dc_lungs",
+                 "HOMICIDE":"dc_stabbing",
+                 "SENIL":"dc_age",
+                 "DROPSY":"dc_illness",
+                 "NOURISHMENT":"dc_stomach",
+                 "RIVER":"dc_drown",
+                 "INFLUENZA":"dc_illness",
+                 "CANCER":"dc_illness",
+                 "SYNCOPE":"dc_heart",
+                 "MENTAL":"dc_brain",
+                 "CEREBRAL":"dc_brain",
+                 "HAEMORRHAGE":"dc_brain",
+                 "ASTH":"dc_lungs",
+                 "BLOOD":"dc_heart",
+                 "RUPTURE":"dc_blood",
+                 "MANSLAUGHTER":"dc_stabbing",
+                 "LAUDANUM":"dc_poison",
+                 "BIRTH":"dc_childbirth",
+                 "MISADVENTURE":"dc_misadventure",
+                 "OVERDOSE":"dc_poison",
+                 "DECAY":"dc_age",
+                 "FOUND":"dc_unknown",
+                 "SKULL":"dc_brain",
+                 "NUTRITION":"dc_starvation",
+                 "EXHAUST":"dc_exposure",
+                 "FOOD":"dc_starvation",
+                 "PERITONITIS":"dc_stomach",
+                 "DYSENT":"dc_stomach",
+                 "TETANUS":"dc_illness",
+                 " OWN ":"dc_suicide",
+                 "NOT KNOWN":"dc_unknown",
+                 "UNKNOW":"dc_unknown",
+                 "NOXI":"dc_poison",
+                 "HEAD":"dc_brain",
+                 "CHLOROFORM":"dc_poison",
+                 "ASPHYXIA":"dc_lungs",
+                 "COUGH":"dc_lungs",
+                 "DOSE":"dc_poison",
+                 "CONSUMPTION":"dc_starvation",
+                 "PULMONARY":"dc_heart",
+                 "ATROPHY":"dc_exposure",
+                 "PERICARDIUM":"dc_heart",
+                 "NO EVIDENCE":"dc_unknown",
+                 "SEPTICAEMIA":"dc_poison",
+                 "RUN OVER":"dc_wheel",
+                 "INTESTINE":"dc_stomach",
+                 "ABSCESS":"dc_stomach",
+                 "KIDNEY":"dc_stomach",
+                 "DISLOCATION":"dc_falling",
+                 "PLEURISY":"dc_lungs",
+                 "EATING":"dc_stomach",
+                 "VERTIGO":"dc_falling",
+                 "SUNSTROKE":"dc_illness",
+                 "MENINGITIS":"dc_illness"]
+    
+    for (deathKey,deathType) in types
+    {
+        if death.uppercased().contains(deathKey)
+        {
+            deaths.insert(deathType)
+        }
+    }
+    
+    // they didn't get picked up yet
+    // then it means they are one of those "hey it's murder!" leftover deaths
+    if deaths.count == 0
+    {
+        deaths.insert("dc_stabbing")
+    }
+    
+    return Array(deaths)
+}
+
 func jsonThatShit(_ jsonName : String) -> JSON
 {
     let jsonURL = URL(fileURLWithPath: "\(inputFolder)\(jsonName).json")
@@ -169,6 +302,8 @@ enum LincKey : String
 
 var data : [String:[LincKey:String]] = [:]
 
+var deaths : Set<String> = []
+
 for (key, json) in jsonThatShit("inquests")
 {
     if let name = json["NAME"].string,
@@ -185,6 +320,8 @@ for (key, json) in jsonThatShit("inquests")
             death[.deathPermalink] = deathPerma
         }
         data[name] = death
+        
+        deaths.insert(deathReason)
     }
 }
 
@@ -211,13 +348,13 @@ for person in data
 {
     var peep : [LincKey : String]? = nil
     
-    if person.value[.convictDate] != nil
-    {
-        peep = wipeImmigrationData(person: wipeBirthData(person: person.value))
-    }
-    else if person.value[.immigrationDate] != nil
+    if person.value[.immigrationDate] != nil
     {
         peep = wipeBirthData(person: wipeConvictData(person: person.value))
+    }
+    else if person.value[.convictDate] != nil
+    {
+        peep = wipeImmigrationData(person: wipeBirthData(person: person.value))
     }
     else if person.value[.birthDate] != nil
     {
@@ -227,7 +364,7 @@ for person in data
     data[person.key] = peep
 }
 
-/*
+// debugging output
 print("Total people: \(data.count)")
 print("Tassie born: \(data.filter({ $0.value[.birthDate] != nil }).count)")
 print("Immigrant: \(data.filter({ $0.value[.immigrationDate] != nil }).count)")
@@ -238,8 +375,13 @@ print("Trialed people: \(data.filter({ $0.value[.courtOffense] != nil }).count)"
 print("Hospitalised people: \(data.filter({ $0.value[.hospitalRemark] != nil }).count)")
 print("Censused people: \(data.filter({ $0.value[.censusPlace] != nil }).count)")
 print("Had kids at census time: \(data.filter({ $0.value[.censusKids] == "Yes" }).count)")
-*/
 
+print("\nThere are \(deaths.count) deaths")
+//print("There are \(deaths.filter({ $0.contains("Accident") }).count) accidental deaths")
+//print("There are \(deaths.filter({ $0.contains("Accidentally drowned") }).count) accidental drownings\n")
+//deaths.sorted().forEach({ print($0) })
+
+// outputting the data to the form the server needs
 var json : [[String:Any]] = []
 for (key,value) in data
 {
@@ -247,7 +389,6 @@ for (key,value) in data
     newPerson["name"] = key
     
     var inquest : [String:Any] = [:]
-    inquest["death_causes"] = ["dc_misc"]
     
     var birth : [String:String] = [:]
     
@@ -274,6 +415,7 @@ for (key,value) in data
             inquest["death_date"] = dataValue
         case .deathVerdict:
             inquest["death_verdict"] = dataValue
+            inquest["death_causes"] = deathTypes(death: dataValue)
         case .deathYear:
             inquest["year"] = dataValue
         case .deathPermalink:
@@ -382,4 +524,20 @@ for (key,value) in data
 let jsonData = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
 let outputURL = URL(fileURLWithPath: "\(outputFolder)person.json")
 try! jsonData.write(to: outputURL)
+
+for person in json
+{
+    guard let inquest = person["inquest"] as? [String:Any] else
+    {
+        fatalError("No inquest found for \(person["name"])")
+    }
+    guard let deathTypes = inquest["death_causes"] as? [String] else
+    {
+        fatalError("No death causes found for \(person["name"])")
+    }
+    guard deathTypes.count > 0 else
+    {
+        fatalError("\(person["name"]) has no death type: \(inquest["death_verdict"]))")
+    }
+}
 
