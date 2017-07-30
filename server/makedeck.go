@@ -19,6 +19,10 @@ var prettyLifeEvents = map[string]string{
 	"le_marriage":       "Married",
 }
 
+var deathFix = map[string]string{
+	"dc_visitation": "Visitation by God",
+}
+
 // CreateDeck churns a bunch of people into a card deck.
 func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Precompute different possible traits
@@ -28,9 +32,13 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		if d == "dc_misc" {
 			continue
 		}
+		n := strings.Title(strings.TrimPrefix(d, "dc_"))
+		if fix := deathFix[d]; fix != "" {
+			n = fix
+		}
 		traits[d] = &game.Trait{
 			Key:   d,
-			Name:  strings.Title(strings.TrimPrefix(d, "dc_")),
+			Name:  n,
 			Death: true,
 		}
 	}
