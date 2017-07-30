@@ -148,8 +148,21 @@ func (s *State) AddPlayer() (int, error) {
 		return -1, fmt.Errorf("game not in lobby state [%d!=%d]", s.State, StateLobby)
 	}
 	id := s.nextID
+	n := s.nextID
+	for i := 0; i < id; i++ {
+		if s.Players[i] == nil {
+			n = i
+			break
+		}
+	}
 	s.Players[id] = &Player{
-		Name: fmt.Sprintf("Player %d", id+1),
+		Name:      fmt.Sprintf("Player %d", n+1),
+		Discarded: []*ActionCardState{},
+		Played:    []*ActionCardState{},
+		Hand: &HandState{
+			Actions: []*ActionCardState{},
+			People:  []*PersonCardState{},
+		},
 	}
 	s.nextID++
 	s.notify()
@@ -177,7 +190,7 @@ func (s *State) RemovePlayer(id int) error {
 
 	default:
 		// Go to the next player
-		if s.WhoseTurn == id {
+		if s.State == StateInGame && s.WhoseTurn == id {
 			s.advance()
 		}
 	}

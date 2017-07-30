@@ -1,5 +1,5 @@
 
-$maroon:  #ad1c1c;
+$maroon:  #700f00;
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -10,23 +10,31 @@ $maroon:  #ad1c1c;
   background-size: cover;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding-bottom: 50px;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  align-content: space-between;
 }
 
 .main {
   color: #444;
   background: url(images/paper.jpg);
   font-family: Palatino, serif;
+  font-size: 17px;
 
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  margin: 26px auto 0;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  margin: 50px auto;
   max-width: 550px;
   min-height: 300px;
   padding: 24px;
   position: relative;
   width: 700px;
   z-index: 0;
+  text-align: center;
 
   &::before, &::after {
     content: "";
@@ -49,9 +57,34 @@ $maroon:  #ad1c1c;
     top: 1px;
     transform: rotate(1.4deg);
   }
+
+  a, a:visited, a:link {
+    color: $maroon;
+  }
+
+  a:hover, a:active {
+    color: brown;
+  }
+
+  cite {
+    padding-left: 4px;
+
+    a {
+
+      &::before {
+        content: '[';
+      }
+
+      &::after {
+        content: ']';
+      }
+    }
+  }
 }
 
 .nav {
+  max-width: 800px;
+
   ul {
     list-style: none;
     display: flex;
@@ -61,6 +94,8 @@ $maroon:  #ad1c1c;
   }
 
   li {
+    cursor: pointer;
+    user-select: none;
     font-family: Palatino, serif;
     font-variant: small-caps;
     text-align: center;
@@ -80,9 +115,7 @@ $maroon:  #ad1c1c;
                 -7px -7px #262626;
 
 
-    //transform: rotate(3deg);
     padding: 2em 1.5em 1.5em;
-
 
     text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
     float: left;
@@ -95,19 +128,11 @@ $maroon:  #ad1c1c;
     justify-content: space-around;
 
     &:hover {
-      transition: background 0.5s;
+      transition: background 0.1s;
     }
 
     &.current, &:hover {
-      //border: 1px solid $maroon;
-      background-color: #666;
-      box-shadow: -1px -1px #333,
-      -2px -2px #333,
-      -3px -3px #333,
-      -4px -4px #333,
-      -6px -6px #333,
-      -7px -7px #333;
-
+      background: linear-gradient(to bottom, #4c4c4c 10%, #323232);
     }
   }
 
@@ -130,8 +155,9 @@ $maroon:  #ad1c1c;
   }
 }
 
-  h1 {
-    font-family: Trattatello, cursive;
-    font-size: 35px;
-    margin-bottom: 0;
-  }
+h1 {
+  font-family: Trattatello, cursive;
+  font-size: 35px;
+  margin-bottom: 0;
+}
+
