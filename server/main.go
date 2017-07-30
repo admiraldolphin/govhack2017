@@ -32,9 +32,9 @@ func main() {
 	log.Printf("Loaded traits: %#v", cts)
 
 	deck := game.Deck(testDeck)
-	// if cts != nil && ppl != nil {
-	// 	deck = CreateDeck(cts, ppl)
-	// }
+	if cts != nil && ppl != nil {
+		deck = CreateDeck(cts, ppl)
+	}
 
 	s := server{state: game.New(deck)}
 
