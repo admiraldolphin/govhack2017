@@ -43,7 +43,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <img src={require('./images/Logo_Transparent_Subtitle.png')} className="HeaderImage" />
+        {/*<img src={require('./images/Logo_Transparent_Subtitle.png')} className="HeaderImage" />*/}
         <Navbar
           data={this.state.data}
           changeTab={this.changeTab.bind(this)}
