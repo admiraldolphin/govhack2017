@@ -95,6 +95,7 @@ func (s *State) playOrDiscard(p *Player, a *Action) error {
 
 // MUST GUARD WITH LOCK
 func (s *State) tallyEffects(ac *ActionCard) {
+	someoneAlive := false
 	for _, p := range s.Players {
 		for _, pc := range p.Hand.People {
 			for ti, t := range pc.Card.Traits {
@@ -114,7 +115,15 @@ func (s *State) tallyEffects(ac *ActionCard) {
 					p.Score += pc.Score
 				}
 			}
+			if !pc.Dead {
+				someoneAlive = true
+			}
 		}
+	}
+
+	// If nobody is alive, end the game.
+	if !someoneAlive {
+		s.State = StateGameOver
 	}
 }
 
