@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 // State object for receiving data from remote device.  
 public class StateObject
@@ -29,6 +30,35 @@ public class ServerConnection : MonoBehaviour
     private static String response = String.Empty;
 
     private static Socket socket;
+
+    public static void PutMessage(string message)
+    {
+        lock (ServerConnection.messages)
+        {
+            messages.Enqueue(message);
+        }
+    }
+
+    public static string GetMessage()
+    {
+        if (Monitor.TryEnter(messages))
+        {
+            try
+            {
+                if (messages.Count > 0)
+                {
+                    return messages.Dequeue();
+                } 
+                
+            }
+            finally
+            {
+                Monitor.Exit(messages);
+            }
+        }
+
+        return null;
+    }
 
     private static void StartClient()
     {
@@ -62,6 +92,7 @@ public class ServerConnection : MonoBehaviour
             Debug.LogFormat(e.ToString());
         }
     }
+
 
     private static void ConnectCallback(IAsyncResult ar)
     {
@@ -102,7 +133,7 @@ public class ServerConnection : MonoBehaviour
         }
     }
 
-    public Queue<string> messages = new Queue<string>();
+    public static Queue<string> messages = new Queue<string>();
 
     private static void ReceiveCallback(IAsyncResult ar)
     {
@@ -133,9 +164,9 @@ public class ServerConnection : MonoBehaviour
                         var command = splitData.Dequeue();
 
                         state.sb.Append(command);
-                        
-                        MessageReceived(state.sb.ToString());
 
+                        PutMessage(state.sb.ToString());
+                        
                         // Replace the stringbuilder
                         state.sb = new StringBuilder();
                     }
@@ -201,6 +232,10 @@ public class ServerConnection : MonoBehaviour
     private void Awake()
     {
         MessageReceived += ServerConnection_MessageReceived;
+    }
+
+    public void Connect()
+    {
         StartClient();
     }
 
@@ -209,13 +244,60 @@ public class ServerConnection : MonoBehaviour
         Debug.Log("Message received: " + obj);
     }
 
+    private void Update()
+    {
+        string message = null;
+
+        while ((message = GetMessage()) != null)
+        {
+            MessageReceived(message);
+        }
+    }
+    
+    public void SendAct(Act.Type actType, int card = -1)
+    {
+        var act = new Act();
+        act.act = actType;
+        act.card = card;
+
+        SendMessageToServer(JsonConvert.SerializeObject(act));
+    }
+
     public void SendNoOp()
     {
-        SendMessageToServer("{}");
+        SendAct(Act.Type.ActNoOp);
+        
     }
 
     public void SendStartGame()
     {
-        SendMessageToServer(@"{""action"": 1}");
+        SendAct(Act.Type.ActStartGame);
+        
     }
+    
+    internal void SendDiscardCard(int index)
+    {
+        SendAct(Act.Type.ActDiscard, index);
+    }
+
+    internal void SendPlayCard(int index)
+    {
+        SendAct(Act.Type.ActPlayCard, index);
+    }
+}
+
+[Serializable]
+public class Act
+{
+    public enum Type
+    {
+        ActNoOp, // Do nothing, just tell everybody the state
+	    ActStartGame,            // Go from lobby state to ingame state
+	    ActPlayCard,
+	    ActDiscard,
+	    ActReturnToLobby, // Go from game over state to lobby state
+    }
+
+    public Type act;
+    public int card;
 }

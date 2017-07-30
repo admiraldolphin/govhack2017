@@ -6,10 +6,16 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class CardBackground : MonoBehaviour
 {
-    public CardSpriteSettings settings;
+    public Sprite lifeCard;
+    public Sprite deathCard;
+
+    public Sprite lifeCardSelected;
+    public Sprite deathCardSelected;
+   
 
     void Update()
     {
+        
         Card card = GetComponentInParent<Card>();
 
         Sprite sprite;
@@ -17,13 +23,13 @@ public class CardBackground : MonoBehaviour
         switch (card.type)
         {
             case Card.Type.Death:
-                sprite = card.selected ? settings.deathCardSelected : settings.deathCard;
+                sprite = card.selected ? deathCardSelected : deathCard;
                 break;
 
             case Card.Type.Life:
             default:
 
-                sprite = card.selected ? settings.lifeCardSelected : settings.lifeCard;
+                sprite = card.selected ? lifeCardSelected : lifeCard;
                 break;
         }
 

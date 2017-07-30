@@ -96,10 +96,16 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		if t.PeopleMatching < 1 {
 			continue
 		}
-		acs = append(acs, &game.ActionCard{
+
+		card := &game.ActionCard{
 			Name:  t.Name,
 			Trait: t,
-		})
+		}
+		acs = append(acs, card)
+		// Add 2 of each death card
+		if t.Death {
+			acs = append(acs, card)
+		}
 	}
 
 	// Normalise PeopleMatching values

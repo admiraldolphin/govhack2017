@@ -7,9 +7,9 @@ import (
 
 // Game parameters
 const (
-	endGameAtRound = 5
+	initialClock = 4
 
-	ActionHandSize = 7
+	ActionHandSize = 6
 	PeopleHandSize = 5
 )
 
@@ -95,6 +95,7 @@ func (s *State) playOrDiscard(p *Player, a *Action) error {
 
 // MUST GUARD WITH LOCK
 func (s *State) tallyEffects(ac *ActionCard) {
+	someoneAlive := false
 	for _, p := range s.Players {
 		for _, pc := range p.Hand.People {
 			for ti, t := range pc.Card.Traits {
@@ -114,7 +115,15 @@ func (s *State) tallyEffects(ac *ActionCard) {
 					p.Score += pc.Score
 				}
 			}
+			if !pc.Dead {
+				someoneAlive = true
+			}
 		}
+	}
+
+	// If nobody is alive, end the game.
+	if !someoneAlive {
+		s.State = StateGameOver
 	}
 }
 
@@ -123,10 +132,10 @@ func (s *State) tallyEffects(ac *ActionCard) {
 func (s *State) advance() {
 	n := s.nextPlayer(s.WhoseTurn)
 	if n < s.WhoseTurn {
-		s.Clock++
+		s.Clock--
 	}
 	s.WhoseTurn = n
-	if s.Clock == endGameAtRound {
+	if s.Clock <= 0 {
 		s.State = StateGameOver
 	}
 }
@@ -197,7 +206,7 @@ func (s *State) nextPlayer(after int) int {
 
 // MUST GUARD WITH LOCK
 func (s *State) startGame() {
-	s.Clock = 0
+	s.Clock = initialClock
 	s.WhoseTurn = -1
 	s.advance()
 
@@ -210,8 +219,9 @@ func (s *State) startGame() {
 		pids = append(pids, id)
 	}
 	sort.Ints(pids)
-	for _, id := range pids {
+	for i, id := range pids {
 		p := s.Players[id]
+		p.Name = fmt.Sprintf("Player %d", i+1)
 		p.Discarded = nil
 		p.Played = nil
 		p.Score = 0
