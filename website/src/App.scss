@@ -24,6 +24,7 @@ $maroon:  #700f00;
   color: #444;
   background: url(images/paper.jpg);
   font-family: Palatino, serif;
+  font-size: 17px;
 
   box-shadow: 0 0 20px rgba(0,0,0,0.7);
   margin: 50px auto;
@@ -94,6 +95,7 @@ $maroon:  #700f00;
 
   li {
     cursor: pointer;
+    user-select: none;
     font-family: Palatino, serif;
     font-variant: small-caps;
     text-align: center;
