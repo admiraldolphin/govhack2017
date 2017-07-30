@@ -19,8 +19,8 @@ class Navbar extends Component {
               }}
             >
                 <span>{item.card.source.name}</span>
-	              {    console.log(item.card.traits[0]) }
-								<InlineSVG src={ require('./images/dc/' + item.card.traits[0].key.replace('dc_', '') + '.svg') } />
+	              {    console.log(item.card.traits[0].key) }
+		            <InlineSVG src={ require('./images/dc/' + item.card.traits[0].key.replace('dc_', '') + '.svg') } />
             </li>
         )}
         </ul>
