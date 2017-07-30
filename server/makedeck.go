@@ -41,15 +41,6 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		}
 	}
 
-	// Make cards for traits.
-	acs := make([]*game.ActionCard, 0, len(traits))
-	for _, t := range traits {
-		acs = append(acs, &game.ActionCard{
-			Name:  t.Name,
-			Trait: t,
-		})
-	}
-
 	// Scan people to make cards & accumulate matching traits
 	var pcs []*game.PersonCard
 	for _, p := range ppl {
@@ -97,6 +88,18 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		if p.Census.Year != "" {
 			addTrait("le_census." + p.Census.Year[:3] + "0")
 		}
+	}
+
+	// Make cards for traits (but only that match someone).
+	acs := make([]*game.ActionCard, 0, len(traits))
+	for _, t := range traits {
+		if t.PeopleMatching < 1 {
+			continue
+		}
+		acs = append(acs, &game.ActionCard{
+			Name:  t.Name,
+			Trait: t,
+		})
 	}
 
 	// Normalise PeopleMatching values
