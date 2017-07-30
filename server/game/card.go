@@ -6,6 +6,7 @@ import (
 
 // PersonCard models a game card.
 type PersonCard struct {
+	ID     int          `json:"id"`
 	Name   string       `json:"name"`
 	Traits []*Trait     `json:"traits"`
 	Source *load.Person `json:"source"`
@@ -13,7 +14,10 @@ type PersonCard struct {
 
 // New returns a fresh state for this card.
 func (c *PersonCard) New() *PersonCardState {
-	return &PersonCardState{Card: c}
+	return &PersonCardState{
+		Card:            c,
+		CompletedTraits: []int{},
+	}
 }
 
 // PersonCardState is state of a person card.
@@ -26,6 +30,7 @@ type PersonCardState struct {
 
 // ActionCard models a game card.
 type ActionCard struct {
+	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Trait *Trait `json:"trait"`
 }
