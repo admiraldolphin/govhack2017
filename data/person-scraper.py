@@ -20,16 +20,16 @@ for person in data:
 		start_year = int(person['immigration']['year'])
 	else:
 		continue	
-	if death_year >= start_year:
+	if death_year < start_year:
 		continue
-	if 'marriage' in person and not (start_year >= int(person['marriage']['year']  >= death_year)):
+	if 'marriage' in person and (start_year > int(person['marriage']['year']) or int(person['marriage']['year']) > death_year):
 		continue
-	if 'bankruptcy' in person and not (start_year >= int(person['bankruptcy']['year']  >= death_year)):
+	if 'bankruptcy' in person and (start_year > int(person['bankruptcy']['year']) or int(person['bankruptcy']['year']) > death_year):
 		continue
-	if 'census' in person and not (start_year >= int(person['census']['year']  >= death_year)):
+	if 'census' in person and (start_year > int(person['census']['year']) or int(person['census']['year']) > death_year):
 		continue
-	if 'health-welfare' in person and not (start_year >= int(person['health-welfare']['year']  >= death_year)):
-		continue
+		if 'health-welfare' in person and (start_year > int(person['health-welfare']['year']) or int(person['health-welfare']['year']) > death_year):
+			continue
 	j = j+1
 	i.append(person)
 print j
