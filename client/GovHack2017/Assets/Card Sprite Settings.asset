@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Card Sprite Settings
+  m_EditorClassIdentifier: Assembly-CSharp::CardSpriteSettings
+  lifeCard: {fileID: 21300000, guid: 30d9fa89cba0e014284e4c2d50ec4282, type: 3}
+  deathCard: {fileID: 21300000, guid: ad7ba125bf555c24ab7e02ca98798524, type: 3}
+  lifeCardSelected: {fileID: 21300000, guid: e0b7174248d19414289bb3ae7840052e, type: 3}
+  deathCardSelected: {fileID: 21300000, guid: d288d178425f60d4b85fb1bb442f8a85, type: 3}

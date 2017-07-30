@@ -7,15 +7,36 @@ import (
 	"net/http"
 
 	"github.com/admiraldolphin/govhack2017/server/game"
+	"github.com/admiraldolphin/govhack2017/server/load"
 )
 
 var (
 	gamePort = flag.Int("game_port", 23456, "Port for the game to listen on")
 	httpPort = flag.Int("http_port", 23480, "Port the webserver listens on")
+
+	cardsJSON  = flag.String("cards", "data/cards.json", "File to load traits from")
+	peopleJSON = flag.String("people", "data/person.json", "File to load people from")
 )
 
 func main() {
-	s := server{state: game.New(testDeck)}
+	ppl, err := load.People(*peopleJSON)
+	if err != nil {
+		log.Printf("Couldn't load people, continuing: %v", err)
+	}
+	log.Printf("Loaded %d people", len(ppl))
+
+	cts, err := load.Traits(*cardsJSON)
+	if err != nil {
+		log.Printf("Couldn't load cards.json, continuing: %v", err)
+	}
+	log.Print("Loaded traits")
+
+	deck := game.Deck(testDeck)
+	if cts != nil && ppl != nil {
+		deck = CreateDeck(cts, ppl)
+	}
+
+	s := server{state: game.New(deck)}
 
 	// Set up HTTP handlers
 	http.HandleFunc("/helloz", func(w http.ResponseWriter, r *http.Request) {
