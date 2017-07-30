@@ -219,7 +219,7 @@ func (s *State) startGame() {
 		pids = append(pids, id)
 	}
 	sort.Ints(pids)
-	for i, id := range pids {
+	for _, id := range pids {
 		p := s.Players[id]
 		p.Discarded = nil
 		p.Played = nil
