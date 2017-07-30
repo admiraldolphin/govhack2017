@@ -61,6 +61,8 @@ public class PersonInfoSheet : MonoBehaviour {
             {
                 name = trait.name;
             }
+            traitUI.traitIcon = Card.SpriteForTrait(trait);
+
             traitUI.traitDescription = name;
             traitUI.percent = trait.people_matching;
 

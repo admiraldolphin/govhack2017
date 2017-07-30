@@ -77,6 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aliveSprite: {fileID: 21300000, guid: 7c60a1b44354ddd47847ee2a93d0be6d, type: 3}
   deadSprite: {fileID: 21300000, guid: 06c6162c809132b458c7fc70d72baab4, type: 3}
+  recentlyDeadSprite: {fileID: 21300000, guid: f261ad30c837c2e4e904009f07b87062, type: 3}
 --- !u!114 &114842445135628800
 MonoBehaviour:
   m_ObjectHideFlags: 1
