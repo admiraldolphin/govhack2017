@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 222636845530612020}
   - component: {fileID: 114501895756439702}
   m_Layer: 5
-  m_Name: Card - Life
+  m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611f202b0992b3d4f9f4982d67bdf4b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 7da6a6749f071ae4989a0ef7e2f99333, type: 2}
+  lifeCard: {fileID: 21300000, guid: 30d9fa89cba0e014284e4c2d50ec4282, type: 3}
+  deathCard: {fileID: 21300000, guid: ad7ba125bf555c24ab7e02ca98798524, type: 3}
+  lifeCardSelected: {fileID: 21300000, guid: e0b7174248d19414289bb3ae7840052e, type: 3}
+  deathCardSelected: {fileID: 21300000, guid: d288d178425f60d4b85fb1bb442f8a85, type: 3}
 --- !u!114 &114347455800575850
 MonoBehaviour:
   m_ObjectHideFlags: 1

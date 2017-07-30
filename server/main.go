@@ -4,7 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/admiraldolphin/govhack2017/server/game"
 	"github.com/admiraldolphin/govhack2017/server/load"
@@ -20,6 +23,9 @@ var (
 
 func main() {
 	flag.Parse()
+
+	// Give that server a tiny amount of entropy - servers love entropy.
+	rand.Seed(int64(os.Getpid()) * time.Now().UnixNano())
 
 	ppl, err := load.People(*peopleJSON)
 	if err != nil {
@@ -45,6 +51,9 @@ func main() {
 		fmt.Fprint(w, "Hello, GovHack 2017!\n")
 	})
 	http.HandleFunc("/statusz", func(w http.ResponseWriter, r *http.Request) {
+		h := w.Header()
+		// Allow CORS because whatevs
+		h.Set("Access-Control-Allow-Origin", "*")
 		s.state.Dump(w)
 	})
 
