@@ -40,19 +40,33 @@ public class PersonInfoSheet : MonoBehaviour {
             Destroy(trait.gameObject);
         }
 
+        var deathTrait = state.card.traits.Where(t => t.death).OrderBy(t => t.name == "Misc").Take(1);
+        var otherTraits = state.card.traits.Where(t => t.death == false).Take(2);
+
         var traits = state.card.traits;
 
-        for (int i = 0; i < traits.Length; i++)
-        {
-            var trait = traits[i];
+        var allTraits = otherTraits.Concat(deathTrait);
+
+        foreach (var trait in allTraits)
+        { 
+            var index = Array.IndexOf(traits, trait);
 
             var traitUI = Instantiate(traitPrefab);
-            traitUI.traitDescription = trait.name;
+
+            string name;
+            if (trait.death)
+            {
+                name = "Cause of Death: " + trait.name;    
+            } else
+            {
+                name = trait.name;
+            }
+            traitUI.traitDescription = name;
             traitUI.percent = trait.people_matching;
 
             traitUI.transform.SetParent(traitContainer, false);
 
-            traitUI.status = StatusForTrait(state, i);
+            traitUI.status = StatusForTrait(state, index);
             
         }
         

@@ -60,7 +60,9 @@ public class ServerConnection : MonoBehaviour
         return null;
     }
 
-    private static void StartClient()
+    public string host;
+
+    private static void StartClient(string host)
     {
         // Connect to a remote device.  
         try
@@ -70,7 +72,7 @@ public class ServerConnection : MonoBehaviour
             // remote device is "host.contoso.com".  
             
 
-            IPHostEntry ipHostInfo = Dns.Resolve("localhost");
+            IPHostEntry ipHostInfo = Dns.Resolve(host);
             IPAddress ipAddress = ipHostInfo
                 .AddressList
                 .Where(address => address.AddressFamily == AddressFamily.InterNetwork)
@@ -236,7 +238,7 @@ public class ServerConnection : MonoBehaviour
 
     public void Connect()
     {
-        StartClient();
+        StartClient(host);
     }
 
     private void ServerConnection_MessageReceived(string obj)

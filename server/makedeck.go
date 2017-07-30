@@ -24,6 +24,10 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Precompute different possible traits
 	traits := make(map[string]*game.Trait)
 	for _, d := range ct.Death {
+		// Eliminate dc_misc
+		if d == "dc_misc" {
+			continue
+		}
 		traits[d] = &game.Trait{
 			Key:   d,
 			Name:  strings.Title(strings.TrimPrefix(d, "dc_")),
@@ -43,8 +47,14 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 
 	// Scan people to make cards & accumulate matching traits
 	var pcs []*game.PersonCard
-	for _, p := range ppl {
+	for id, p := range ppl {
+		// Eliminate dc_misc
+		if len(p.Inquest.DeathCauses) == 1 && p.Inquest.DeathCauses[0] == "dc_misc" {
+			continue
+		}
+
 		pc := &game.PersonCard{
+			ID:     id,
 			Name:   p.Name,
 			Source: p,
 		}
@@ -61,6 +71,10 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		}
 
 		for _, d := range p.Inquest.DeathCauses {
+			// Eliminate dc_misc
+			if d == "dc_misc" {
+				continue
+			}
 			addTrait(d)
 		}
 
@@ -92,19 +106,28 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 
 	// Make cards for traits (but only that match someone).
 	acs := make([]*game.ActionCard, 0, len(traits))
+	id := 0
+	lec, dcc := 0, 0
 	for _, t := range traits {
 		if t.PeopleMatching < 1 {
 			continue
 		}
 
 		card := &game.ActionCard{
+			ID:    id,
 			Name:  t.Name,
 			Trait: t,
 		}
+		id++
 		acs = append(acs, card)
 		// Add 2 of each death card
 		if t.Death {
+			card.ID = id
+			id++
 			acs = append(acs, card)
+			dcc += 2
+		} else {
+			lec++
 		}
 	}
 
@@ -113,7 +136,7 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		t.PeopleMatching /= float64(len(pcs))
 	}
 
-	log.Printf("Generated %d people cards and %d action cards", len(pcs), len(acs))
+	log.Printf("Generated %d people cards and %d action cards (%d life events, %d deaths)", len(pcs), len(acs), lec, dcc)
 	return &game.Hand{
 		People:  pcs,
 		Actions: acs,

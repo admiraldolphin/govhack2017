@@ -149,7 +149,13 @@ func (s *State) AddPlayer() (int, error) {
 	}
 	id := s.nextID
 	s.Players[id] = &Player{
-		Name: fmt.Sprintf("Player %d", id),
+		Name:      fmt.Sprintf("Player %d", id+1),
+		Discarded: []*ActionCardState{},
+		Played:    []*ActionCardState{},
+		Hand: &HandState{
+			Actions: []*ActionCardState{},
+			People:  []*PersonCardState{},
+		},
 	}
 	s.nextID++
 	s.notify()
@@ -219,11 +225,10 @@ func (s *State) startGame() {
 		pids = append(pids, id)
 	}
 	sort.Ints(pids)
-	for i, id := range pids {
+	for _, id := range pids {
 		p := s.Players[id]
-		p.Name = fmt.Sprintf("Player %d", i+1)
-		p.Discarded = nil
-		p.Played = nil
+		p.Discarded = []*ActionCardState{}
+		p.Played = []*ActionCardState{}
 		p.Score = 0
 		p.Hand = &HandState{
 			Actions: s.deck.DrawActions(ActionHandSize),
