@@ -47,13 +47,14 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 
 	// Scan people to make cards & accumulate matching traits
 	var pcs []*game.PersonCard
-	for _, p := range ppl {
+	for id, p := range ppl {
 		// Eliminate dc_misc
 		if len(p.Inquest.DeathCauses) == 1 && p.Inquest.DeathCauses[0] == "dc_misc" {
 			continue
 		}
 
 		pc := &game.PersonCard{
+			ID:     id,
 			Name:   p.Name,
 			Source: p,
 		}
@@ -105,18 +106,23 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 
 	// Make cards for traits (but only that match someone).
 	acs := make([]*game.ActionCard, 0, len(traits))
+	id := 0
 	for _, t := range traits {
 		if t.PeopleMatching < 1 {
 			continue
 		}
 
 		card := &game.ActionCard{
+			ID:    id,
 			Name:  t.Name,
 			Trait: t,
 		}
+		id++
 		acs = append(acs, card)
 		// Add 2 of each death card
 		if t.Death {
+			card.ID = id
+			id++
 			acs = append(acs, card)
 		}
 	}
