@@ -7,7 +7,7 @@ import (
 
 // Game parameters
 const (
-	endGameAtRound = 5
+	initialClock = 4
 
 	ActionHandSize = 6
 	PeopleHandSize = 5
@@ -132,10 +132,10 @@ func (s *State) tallyEffects(ac *ActionCard) {
 func (s *State) advance() {
 	n := s.nextPlayer(s.WhoseTurn)
 	if n < s.WhoseTurn {
-		s.Clock++
+		s.Clock--
 	}
 	s.WhoseTurn = n
-	if s.Clock == endGameAtRound {
+	if s.Clock <= 0 {
 		s.State = StateGameOver
 	}
 }
@@ -206,7 +206,7 @@ func (s *State) nextPlayer(after int) int {
 
 // MUST GUARD WITH LOCK
 func (s *State) startGame() {
-	s.Clock = 0
+	s.Clock = initialClock
 	s.WhoseTurn = -1
 	s.advance()
 
