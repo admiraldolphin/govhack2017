@@ -15,8 +15,8 @@ class App extends Component {
           "name": "Towers, John",
           "traits": [
             {
-              "key": "dc_misc",
-              "name": "Misc",
+              "key": "dc_acid",
+              "name": "Acid",
               "death": true,
               "people_matching": 1
             },
@@ -311,13 +311,13 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Data
+          data={this.state.data[this.state.focusId].card.source}
+        />
         <Navbar
           data={this.state.data}
           changeTab={this.changeTab.bind(this)}
           isCurrent={this.isCurrentTab.bind(this)}
-        />
-        <Data
-          data={this.state.data[this.state.focusId].card.source}
         />
       </div>
     );

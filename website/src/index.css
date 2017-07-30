@@ -4,7 +4,7 @@ body {
   font-family: sans-serif;
   background-color: grey; }
 
-html, body, #root {
+html, body, #root, #root > div, .App {
   height: 100%; }
 
 /*# sourceMappingURL=index.css.map */
