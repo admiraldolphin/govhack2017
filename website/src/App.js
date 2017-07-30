@@ -15,8 +15,8 @@ class App extends Component {
           "name": "Towers, John",
           "traits": [
             {
-              "key": "dc_misc",
-              "name": "Misc",
+              "key": "dc_acid",
+              "name": "Acid",
               "death": true,
               "people_matching": 1
             },

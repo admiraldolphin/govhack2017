@@ -4,8 +4,6 @@ import InlineSVG from "react-inlinesvg";
 
 class Navbar extends Component {
   render() {
-    let deathtype = 'misc';
-    let deathimage = require('./images/dc/misc.svg');
 
     return (
       <div className="nav">
@@ -21,7 +19,8 @@ class Navbar extends Component {
               }}
             >
                 <span>{item.card.source.name}</span>
-								<InlineSVG src={ deathimage } />
+	              {    console.log(item.card.traits[0]) }
+								<InlineSVG src={ require('./images/dc/' + item.card.traits[0].key.replace('dc_', '') + '.svg') } />
             </li>
         )}
         </ul>
