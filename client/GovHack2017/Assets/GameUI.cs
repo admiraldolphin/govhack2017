@@ -17,9 +17,10 @@ public class GameUI : MonoBehaviour {
 
     public Text clock;
     public Text turnStatus; // "your turn" etc
-    
-	// Use this for initialization
-	void Start () {
+    public GameObject gameOverUI;
+
+    // Use this for initialization
+    void Start () {
         Game.instance.StateUpdated += StateUpdated;
 
         StateUpdated(Game.instance.state, Game.instance.state);
@@ -29,7 +30,7 @@ public class GameUI : MonoBehaviour {
     {
         if (newState.state == State.Type.GameOver)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+            gameOverUI.SetActive(true);
         }
 
         clock.text = newState.clock.ToString();
