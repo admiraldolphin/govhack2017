@@ -26,6 +26,7 @@ type State struct {
 
 	// Fields for managing the game.
 	nextID   int
+	nextNum  int
 	baseDeck Deck
 	deck     Deck
 
