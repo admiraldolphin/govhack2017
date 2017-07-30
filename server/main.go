@@ -19,6 +19,8 @@ var (
 )
 
 func main() {
+	flag.Parse()
+
 	ppl, err := load.People(*peopleJSON)
 	if err != nil {
 		log.Printf("Couldn't load people, continuing: %v", err)
