@@ -6,6 +6,7 @@ import (
 
 // PersonCard models a game card.
 type PersonCard struct {
+	ID     int          `json:"id"`
 	Name   string       `json:"name"`
 	Traits []*Trait     `json:"traits"`
 	Source *load.Person `json:"source"`
@@ -26,6 +27,7 @@ type PersonCardState struct {
 
 // ActionCard models a game card.
 type ActionCard struct {
+	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Trait *Trait `json:"trait"`
 }
