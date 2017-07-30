@@ -1,9 +1,14 @@
 package game
 
+import (
+	"github.com/admiraldolphin/govhack2017/server/load"
+)
+
 // PersonCard models a game card.
 type PersonCard struct {
-	Name   string   `json:"name"`
-	Traits []*Trait `json:"traits"`
+	Name   string       `json:"name"`
+	Traits []*Trait     `json:"traits"`
+	Source *load.Person `json:"source"`
 }
 
 // New returns a fresh state for this card.

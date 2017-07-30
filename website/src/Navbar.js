@@ -4,14 +4,17 @@ import './App.css';
 class Navbar extends Component {
   render() {
     return (
-      <div>
+      <div className="nav">
+        <ul>
         { this.props.data.map (
           (item, key) =>
-            <button
+            <li
               onClick={() => this.props.changeTab(key)}
-              key={key}>{item.NAME}
-            </button>
+              key={key}>
+                <span>{item.NAME}</span>
+            </li>
         )}
+        </ul>
       </div>
     );
   }

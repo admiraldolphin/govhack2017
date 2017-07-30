@@ -4,10 +4,10 @@ import './App.css';
 class Data extends Component {
   render() {
     return (
-      <div>
-        <p>
+      <div className="data">
+        <h1>
           You killed {this.props.data.NAME}!
-        </p>
+        </h1>
         {this.props.data.DEATH_DATE &&
           <p>
             Date of DEATH: {this.props.data.DEATH_DATE}
