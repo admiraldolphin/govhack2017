@@ -20,6 +20,7 @@ public class TraitEntry
     public string key;
     public string name;
     public bool death;
+    public float people_matching;
 }
 
 [Serializable]
@@ -44,6 +45,16 @@ public class HandState
 {
     public PersonCardState[] people;
     public ActionCardState[] actions;
+
+    public int IndexOfPerson(PersonCardState person)
+    {
+        return Array.IndexOf(people, person);
+    }
+
+    public int IndexOfCard(ActionCardState card)
+    {
+        return Array.IndexOf(actions, card);
+    }
 }
 
 [Serializable]
@@ -103,6 +114,37 @@ public class Card : MonoBehaviour, IPointerClickHandler {
         Death
     }
 
+    private ActionCardState _state;
+
+    public ActionCardState state
+    {
+        get
+        {
+            return _state;
+        }
+        set
+        {
+            _state = value;
+
+            this.text = value.card.name;
+
+            if (value.card.trait != null)
+            {
+                this.type = value.card.trait.death ? Type.Death : Type.Life;
+                this.icon = SpriteForTrait(value.card.trait);
+            }
+
+            this.selected = false;
+        }
+    }
+
+    public Sprite SpriteForTrait(TraitEntry trait)
+    {
+        var iconName = trait.key.Split('.')[0];
+        var name = "Icons/" + iconName;
+        return Resources.Load<Sprite>(name);
+    }
+
     public Card.Type type;
 
     public string text;
@@ -111,8 +153,12 @@ public class Card : MonoBehaviour, IPointerClickHandler {
 
     public bool selected;
 
+    
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        selected = !selected;
+        // only allow selection when it's my turn
+
+        FindObjectOfType<GameUI>().CardSelected(this);
+        
     }
 }
