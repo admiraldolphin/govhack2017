@@ -45,6 +45,9 @@ func main() {
 		fmt.Fprint(w, "Hello, GovHack 2017!\n")
 	})
 	http.HandleFunc("/statusz", func(w http.ResponseWriter, r *http.Request) {
+		h := w.Header()
+		// Allow CORS because whatevs
+		h.Set("Access-Control-Allow-Origin", "*")
 		s.state.Dump(w)
 	})
 
