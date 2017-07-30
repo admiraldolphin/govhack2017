@@ -9,7 +9,7 @@ import (
 const (
 	endGameAtRound = 5
 
-	ActionHandSize = 7
+	ActionHandSize = 6
 	PeopleHandSize = 5
 )
 
