@@ -6,7 +6,7 @@
 	"death": ["dc_acid", "dc_age", "dc_alcohol", "dc_brain", "dc_bridge",
 		"dc_bull", "dc_burning", "dc_crushing", "dc_drowning", "dc_explosion",
 		"dc_exposure", "dc_falling", "dc_gunshot", "dc_heart", "dc_horse",
-		"dc_illness", "dc_inhalaiton", "dc_lungs", "dc_medicine", "dc_mining",
+		"dc_illness", "dc_inhalation", "dc_lungs", "dc_medicine", "dc_mining",
 		"dc_misc", "dc_poison", "dc_scalding", "dc_shipwreck", "dc_shock",
 		"dc_snakebite", "dc_stabbing", "dc_starvation", "dc_stomach",
 		"dc_train", "dc_tree", "dc_unexplained", "dc_visitation", "dc_wagon",
