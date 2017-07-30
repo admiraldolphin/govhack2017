@@ -5,6 +5,6 @@ body {
   background-color: grey
 }
 
-html, body, #root {
+html, body, #root, #root > div, .App {
   height: 100%;
 }
