@@ -107,6 +107,7 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Make cards for traits (but only that match someone).
 	acs := make([]*game.ActionCard, 0, len(traits))
 	id := 0
+	lec, dcc := 0, 0
 	for _, t := range traits {
 		if t.PeopleMatching < 1 {
 			continue
@@ -124,6 +125,9 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 			card.ID = id
 			id++
 			acs = append(acs, card)
+			dcc += 2
+		} else {
+			lec++
 		}
 	}
 
@@ -132,7 +136,7 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		t.PeopleMatching /= float64(len(pcs))
 	}
 
-	log.Printf("Generated %d people cards and %d action cards", len(pcs), len(acs))
+	log.Printf("Generated %d people cards and %d action cards (%d life events, %d deaths)", len(pcs), len(acs), lec, dcc)
 	return &game.Hand{
 		People:  pcs,
 		Actions: acs,
