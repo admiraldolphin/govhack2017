@@ -311,13 +311,13 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Data
+          data={this.state.data[this.state.focusId].card.source}
+        />
         <Navbar
           data={this.state.data}
           changeTab={this.changeTab.bind(this)}
           isCurrent={this.isCurrentTab.bind(this)}
-        />
-        <Data
-          data={this.state.data[this.state.focusId].card.source}
         />
       </div>
     );

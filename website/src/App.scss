@@ -1,5 +1,5 @@
 
-$maroon:  #ad1c1c;
+$maroon:  #700f00;
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -10,8 +10,14 @@ $maroon:  #ad1c1c;
   background-size: cover;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding-bottom: 50px;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  align-content: space-between;
 }
 
 .main {
@@ -20,7 +26,7 @@ $maroon:  #ad1c1c;
   font-family: Palatino, serif;
 
   box-shadow: 0 0 20px rgba(0,0,0,0.7);
-  margin: 26px auto 0;
+  margin: 50px auto;
   max-width: 550px;
   min-height: 300px;
   padding: 24px;
@@ -52,19 +58,31 @@ $maroon:  #ad1c1c;
   }
 
   a, a:visited, a:link {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px solid #bbb;
+    color: $maroon;
   }
 
   a:hover, a:active {
-    color: #262626;
-    border-bottom-color: #666;
+    color: brown;
+  }
+
+  cite {
+    padding-left: 4px;
+
+    a {
+
+      &::before {
+        content: '[';
+      }
+
+      &::after {
+        content: ']';
+      }
+    }
   }
 }
 
 .nav {
-  max-width: 900px;
+  max-width: 800px;
 
   ul {
     list-style: none;
