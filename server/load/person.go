@@ -28,7 +28,7 @@ type Person struct {
 		DepartureDate string `json:"departure_date,omitempty"`
 		ConvictPort   string `json:"convict_port,omitempty"`
 		ConvictShip   string `json:"convict_ship,omitempty"`
-		Year          string `json:"yea,omitemptyr"`
+		Year          string `json:"year,omitemptyr"`
 		Permalink     string `json:"permalink,omitempty"`
 	} `json:"convict,omitempty"`
 	Bankruptcy struct {
