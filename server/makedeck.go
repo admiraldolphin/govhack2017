@@ -24,6 +24,10 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Precompute different possible traits
 	traits := make(map[string]*game.Trait)
 	for _, d := range ct.Death {
+		// Eliminate dc_misc
+		if d == "dc_misc" {
+			continue
+		}
 		traits[d] = &game.Trait{
 			Key:   d,
 			Name:  strings.Title(strings.TrimPrefix(d, "dc_")),
@@ -44,6 +48,11 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 	// Scan people to make cards & accumulate matching traits
 	var pcs []*game.PersonCard
 	for _, p := range ppl {
+		// Eliminate dc_misc
+		if len(p.Inquest.DeathCauses) == 1 && p.Inquest.DeathCauses[0] == "dc_misc" {
+			continue
+		}
+
 		pc := &game.PersonCard{
 			Name:   p.Name,
 			Source: p,
@@ -61,6 +70,10 @@ func CreateDeck(ct *load.Cards, ppl []*load.Person) game.Deck {
 		}
 
 		for _, d := range p.Inquest.DeathCauses {
+			// Eliminate dc_misc
+			if d == "dc_misc" {
+				continue
+			}
 			addTrait(d)
 		}
 
