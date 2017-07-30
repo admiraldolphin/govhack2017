@@ -83,7 +83,6 @@ func TestGame(t *testing.T) {
 								{Card: &game.ActionCard{Name: "action3"}},
 								{Card: &game.ActionCard{Name: "action4"}},
 								{Card: &game.ActionCard{Name: "action5"}},
-								{Card: &game.ActionCard{Name: "action6"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person0"}},
@@ -98,13 +97,12 @@ func TestGame(t *testing.T) {
 						Name: "Player 1",
 						Hand: &game.HandState{
 							Actions: []*game.ActionCardState{
+								{Card: &game.ActionCard{Name: "action6"}},
 								{Card: &game.ActionCard{Name: "action7"}},
 								{Card: &game.ActionCard{Name: "action8"}},
 								{Card: &game.ActionCard{Name: "action9"}},
 								{Card: &game.ActionCard{Name: "action10"}},
 								{Card: &game.ActionCard{Name: "action11"}},
-								{Card: &game.ActionCard{Name: "action12"}},
-								{Card: &game.ActionCard{Name: "action13"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person5"}},
@@ -117,7 +115,7 @@ func TestGame(t *testing.T) {
 					},
 				},
 				WhoseTurn: 0,
-				Clock:     0,
+				Clock:     4,
 			},
 		},
 		{
@@ -135,10 +133,9 @@ func TestGame(t *testing.T) {
 								{Card: &game.ActionCard{Name: "action0"}},
 								{Card: &game.ActionCard{Name: "action1"}},
 								{Card: &game.ActionCard{Name: "action2"}},
-								{Card: &game.ActionCard{Name: "action14"}},
+								{Card: &game.ActionCard{Name: "action12"}},
 								{Card: &game.ActionCard{Name: "action4"}},
 								{Card: &game.ActionCard{Name: "action5"}},
-								{Card: &game.ActionCard{Name: "action6"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person0"}},
@@ -156,13 +153,12 @@ func TestGame(t *testing.T) {
 						Name: "Player 1",
 						Hand: &game.HandState{
 							Actions: []*game.ActionCardState{
+								{Card: &game.ActionCard{Name: "action6"}},
 								{Card: &game.ActionCard{Name: "action7"}},
 								{Card: &game.ActionCard{Name: "action8"}},
 								{Card: &game.ActionCard{Name: "action9"}},
 								{Card: &game.ActionCard{Name: "action10"}},
 								{Card: &game.ActionCard{Name: "action11"}},
-								{Card: &game.ActionCard{Name: "action12"}},
-								{Card: &game.ActionCard{Name: "action13"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person5"}},
@@ -175,7 +171,7 @@ func TestGame(t *testing.T) {
 					},
 				},
 				WhoseTurn: 1,
-				Clock:     0,
+				Clock:     4,
 			},
 		},
 		{
@@ -193,10 +189,9 @@ func TestGame(t *testing.T) {
 								{Card: &game.ActionCard{Name: "action0"}},
 								{Card: &game.ActionCard{Name: "action1"}},
 								{Card: &game.ActionCard{Name: "action2"}},
-								{Card: &game.ActionCard{Name: "action14"}},
+								{Card: &game.ActionCard{Name: "action12"}},
 								{Card: &game.ActionCard{Name: "action4"}},
 								{Card: &game.ActionCard{Name: "action5"}},
-								{Card: &game.ActionCard{Name: "action6"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person0"}},
@@ -214,13 +209,12 @@ func TestGame(t *testing.T) {
 						Name: "Player 1",
 						Hand: &game.HandState{
 							Actions: []*game.ActionCardState{
+								{Card: &game.ActionCard{Name: "action6"}},
 								{Card: &game.ActionCard{Name: "action7"}},
 								{Card: &game.ActionCard{Name: "action8"}},
 								{Card: &game.ActionCard{Name: "action9"}},
 								{Card: &game.ActionCard{Name: "action10"}},
 								{Card: &game.ActionCard{Name: "action11"}},
-								{Card: &game.ActionCard{Name: "action12"}},
-								{Card: &game.ActionCard{Name: "action13"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person5"}},
@@ -233,7 +227,7 @@ func TestGame(t *testing.T) {
 					},
 				},
 				WhoseTurn: 1,
-				Clock:     0,
+				Clock:     4,
 			},
 		},
 		{
@@ -251,10 +245,9 @@ func TestGame(t *testing.T) {
 								{Card: &game.ActionCard{Name: "action0"}},
 								{Card: &game.ActionCard{Name: "action1"}},
 								{Card: &game.ActionCard{Name: "action2"}},
-								{Card: &game.ActionCard{Name: "action14"}},
+								{Card: &game.ActionCard{Name: "action12"}},
 								{Card: &game.ActionCard{Name: "action4"}},
 								{Card: &game.ActionCard{Name: "action5"}},
-								{Card: &game.ActionCard{Name: "action6"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person0"}},
@@ -272,13 +265,12 @@ func TestGame(t *testing.T) {
 						Name: "Player 1",
 						Hand: &game.HandState{
 							Actions: []*game.ActionCardState{
+								{Card: &game.ActionCard{Name: "action6"}},
 								{Card: &game.ActionCard{Name: "action7"}},
-								{Card: &game.ActionCard{Name: "action8"}},
-								{Card: &game.ActionCard{Name: "action15"}},
+								{Card: &game.ActionCard{Name: "action13"}},
+								{Card: &game.ActionCard{Name: "action9"}},
 								{Card: &game.ActionCard{Name: "action10"}},
 								{Card: &game.ActionCard{Name: "action11"}},
-								{Card: &game.ActionCard{Name: "action12"}},
-								{Card: &game.ActionCard{Name: "action13"}},
 							},
 							People: []*game.PersonCardState{
 								{Card: &game.PersonCard{Name: "person5"}},
@@ -289,12 +281,12 @@ func TestGame(t *testing.T) {
 							},
 						},
 						Discarded: []*game.ActionCardState{
-							{Card: &game.ActionCard{Name: "action9"}, Discarded: true},
+							{Card: &game.ActionCard{Name: "action8"}, Discarded: true},
 						},
 					},
 				},
 				WhoseTurn: 0,
-				Clock:     1,
+				Clock:     3,
 			},
 		},
 	}
