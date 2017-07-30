@@ -26,6 +26,7 @@ public class TraitEntry
 [Serializable]
 public class PersonCard
 {
+    public int ID;
     public string name;
     public TraitEntry[] traits;
 }
@@ -38,6 +39,7 @@ public class PersonCardState
 
     public int[] completed_traits;
     public int score;
+
 }
 
 [Serializable]
@@ -86,6 +88,7 @@ public class State
 [Serializable]
 public class ActionCard
 {
+    public int ID;
     public string name;
 
     public TraitEntry trait;
@@ -138,7 +141,7 @@ public class Card : MonoBehaviour, IPointerClickHandler {
         }
     }
 
-    public Sprite SpriteForTrait(TraitEntry trait)
+    public static Sprite SpriteForTrait(TraitEntry trait)
     {
         var iconName = trait.key.Split('.')[0];
         var name = "Icons/" + iconName;

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LobbyMenu : MonoBehaviour {
 
-    public LobbyPlayerIcon playerPrefab;
+    public Text lobbyStatusText;
+    public Text readyLabel;
 
     public RectTransform lobbyContainer;
 
@@ -16,21 +18,13 @@ public class LobbyMenu : MonoBehaviour {
 
     private void StateUpdated(State oldState, State newState)
     {
-        foreach (Transform player in lobbyContainer)
-        {
-            Destroy(player.gameObject);
-        }
+        var playerCount = newState.players.Count;
 
-        foreach (var player in newState.players)
-        {
-            var newItem = Instantiate(playerPrefab);
+        var playerStatus = string.Format("{0} player{1}", playerCount, playerCount == 1 ? "" : "s");
 
-            newItem.playerName = player.Value.name;
+        lobbyStatusText.text = playerStatus;
 
-            newItem.isCurrentPlayer = player.Key == Game.instance.myPlayerNumber;
-            
-            newItem.transform.SetParent(lobbyContainer, false);
-        }
+        readyLabel.gameObject.SetActive(playerCount > 1);
         
         if (newState.state == State.Type.InGame)
         {

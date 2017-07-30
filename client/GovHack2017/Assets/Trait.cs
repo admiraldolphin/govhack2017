@@ -20,6 +20,9 @@ public class Trait : MonoBehaviour {
         NotCompletable
     }
 
+    [HideInInspector]
+    public Sprite traitIcon;
+
     public Status status
     {
         set
@@ -34,10 +37,8 @@ public class Trait : MonoBehaviour {
                     statusIcon.sprite = notCompletableSprite;
                     return;
                 case Status.NotYetCompleted:
-                    statusIcon.enabled = false;
-                    
+                    statusIcon.sprite = traitIcon;
                     return;
-                       
             }
         }
     }

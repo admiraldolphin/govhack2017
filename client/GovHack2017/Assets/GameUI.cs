@@ -19,6 +19,10 @@ public class GameUI : MonoBehaviour {
     public Text turnStatus; // "your turn" etc
     public GameObject gameOverUI;
 
+    public TurnOutcomeUI turnOutcomeUI;
+
+    public Text gameOverSummary;
+
     // Use this for initialization
     void Start () {
         Game.instance.StateUpdated += StateUpdated;
@@ -31,6 +35,10 @@ public class GameUI : MonoBehaviour {
         if (newState.state == State.Type.GameOver)
         {
             gameOverUI.SetActive(true);
+
+            gameOverSummary.text = GenerateEndReport();
+
+            return;
         }
 
         clock.text = newState.clock.ToString();
@@ -71,13 +79,44 @@ public class GameUI : MonoBehaviour {
             personUI.transform.SetParent(personContainer, false);
 
             personUI.state = person;
+
+            // Did they recently die?
+            if (Game.instance.lastTurnOutcome != null && Game.instance.lastTurnOutcome.peopleKilled.Contains(person.card.ID))
+            {
+                personUI.JustBecameDead();
+            }
         }
+
+        var myPeopleRecentlyDead = Game.instance.myHand.people
+            .Where(p => Game.instance.lastTurnOutcome.peopleKilled.Contains(p.card.ID));
+
+        if (Game.instance.lastTurnOutcome != null)
+        {
+            turnOutcomeUI.ShowTurnOutcome(Game.instance.lastTurnOutcome);
+        }
+        
        
-
-
     }
 
+    private string GenerateEndReport()
+    {
 
+        var playerSummary = Game.instance.state.players.OrderByDescending(p => p.Value.score)
+            .Select(p =>
+            {
+                if (p.Key == Game.instance.myPlayerNumber)
+                {
+                    return string.Format("{0} (you): {1} point{2}", p.Value.name, p.Value.score, p.Value.score == 1 ? "" : "s");
+                }
+                else
+                {
+                    return string.Format("{0}: {1} point{2}", p.Value.name, p.Value.score, p.Value.score == 1 ? "" : "s");
+                }
+            });
+         return string.Join("\n", playerSummary.ToArray());
+            
+
+    }
 
     public void PlayCard()
     {
@@ -133,5 +172,14 @@ public class GameUI : MonoBehaviour {
         }
 
         
+    }
+
+    public string gameResultsURL = "http://deathwho.herokuapp.com/{0}";
+
+    public void ShowEndGameResults()
+    {
+        var url = string.Format(gameResultsURL, Game.instance.myPlayerNumber);
+
+        Application.OpenURL(url);
     }
 }
